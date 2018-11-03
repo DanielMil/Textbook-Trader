@@ -1,37 +1,32 @@
 const { GraphQLServer } = require('graphql-yoga');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
-
-console.log(process.env.dbKey);
-
-const DB = process.env.dbKey; 
-mongoose.connect(DB);
+const databaseSchematics = require('./dbSchemas.js') 
 
 const options = {
     port: 8000
 };
 
+const DB = process.env.dbKey; 
+mongoose.connect(DB);
 var Schema = mongoose.Schema;
 
 //Create User collection schema
-var userSchema = new Schema({
-  name :  String
-}, {collection: "Users"});
+var userSchema = new Schema(databaseSchematics.userSchema, {collection: "Users"});
 
 //Create collection
 const User = mongoose.model("User", userSchema);
 
 //Create texbook collection schema
-var textbookSchema = new Schema({
-    courseCode :  String
-  }, {collection: "Textbooks"});
+var textbookSchema = new Schema(databaseSchematics.textbookSchema, {collection: "Textbooks"});
 
 //Create collection
 const Textbook = mongoose.model("Textbook", textbookSchema);
 
 const typeDefs = `
   type Query {
-    hello(name: String): String!
+    getUsers: [User]!
+    getTextbooks: [Textbook]!
   }
   type User {
     id: ID!
@@ -44,23 +39,34 @@ const typeDefs = `
   type Mutation {
     createUser(name: String!): User
     createTextbook(courseCode: String!): Textbook
+    removeUser(id: ID!): Boolean
+    removeTextbook(id: ID!): Boolean
   }
 `;
 
 const resolvers = {
   Query: {
-    hello: (_, { name }) => `Hello ${name || 'World'}`,
+    getTextbooks: () => Textbook.find(),
+    getUsers: () => User.find()
   },
   Mutation: {
-    createUser: async (_, {name} ) => {
+    createUser: async (_, { name } ) => {
         const newUser = new User({name});
         await newUser.save();
         return newUser; 
     },
-    createTextbook: async (_, {courseCode} ) => {
+    createTextbook: async (_, { courseCode } ) => {
         const newTextbook =  new Textbook({courseCode});
         await newTextbook.save(); 
         return newTextbook;
+    },
+    removeUser: async (_, { id } ) => {
+      await User.findByIdAndRemove(id); 
+      return true;
+    },
+    removeTextbook: async (_, { id } ) => {
+      await Textbook.findByIdAndRemove(id); 
+      return true;
     }
   }
 };
