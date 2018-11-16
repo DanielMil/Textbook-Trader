@@ -1,7 +1,8 @@
 
 let SchemasTemplates = {
     userSchema : {
-        name :  String
+        name :  String,
+        email : String
     },
 
     textbookSchema : {

@@ -23,6 +23,7 @@ var textbookSchema = new Schema(databaseSchematics.textbookSchema, {collection: 
 //Create collection
 const Textbook = mongoose.model("Textbook", textbookSchema);
 
+//TODO: Move this to seperate file
 const typeDefs = `
   type Query {
     getUsers: [User]!
@@ -31,27 +32,29 @@ const typeDefs = `
   type User {
     id: ID!
     name: String!  
+    email: String!
   }
   type Textbook {
     id: ID!
     courseCode: String!  
   }
   type Mutation {
-    createUser(name: String!): User
+    createUser(name: String!, email: String!): User
     createTextbook(courseCode: String!): Textbook
     removeUser(id: ID!): Boolean
     removeTextbook(id: ID!): Boolean
   }
 `;
 
+//TODO: Move this to seperate file
 const resolvers = {
   Query: {
     getTextbooks: () => Textbook.find(),
     getUsers: () => User.find()
   },
   Mutation: {
-    createUser: async (_, { name } ) => {
-        const newUser = new User({name});
+    createUser: async (_, { name, email } ) => {
+        const newUser = new User({name, email});
         await newUser.save();
         return newUser; 
     },

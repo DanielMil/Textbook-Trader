@@ -1,37 +1,53 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import TestQueryPage from './Components/testQuery';
+import LoginPage from './Components/loginPage';
 
-//I know this query looks weird. It's just graphQL syntax don't worry. 
-const getAllTextbooks = gql` 
-  {
-    getTextbooks {
-      id
-      courseCode
-    }
-  }
-`;
-
-class App extends Component {
-  render() {
-    const {data: {loading, getTextbooks}} = this.props;
-    if (loading) {
-      return null;
-    }
-    console.log(this.props);
-    return (
+function Routes() {
+  return (
+    <Router>
       <div>
-        <h1>Example of test query:</h1>
-        <div>{getTextbooks.map(textbook => (
-          <div key={`${textbook.id}--course-code`}> 
-            <h3>{textbook.courseCode}</h3> 
-            <p>ID: {textbook.id}</p></div>
-          ))}
-          </div>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/testQuery">About</Link>
+          </li>
+          <li>
+            <Link to="/login">Topics</Link>
+          </li>
+        </ul>
+
+        <hr />
+
+        <Route exact path="/" component={Home} />
+        <Route path="/testquery" component={TestQuery} />
+        <Route path="/login" component={Login} /> 
       </div>
-    );
-  }
+    </Router>
+  );
 }
 
-export default graphql(getAllTextbooks)(App);
+function Home() {
+  return (
+    <div>
+      <h2>Home</h2>
+    </div>
+  );
+}
+
+function TestQuery() {
+  return (
+    <TestQueryPage/>
+  );
+}
+
+function Login() {
+  return (
+    <LoginPage/>
+  );
+}
+
+export default Routes;
