@@ -28,7 +28,8 @@ const typeDefs = `
   type Query {
     getUsers: [User]!
     getTextbooks: [Textbook]!
-    getUserTextbooks(id: ID!): [Textbook]
+    getUserTextbooks(userID: String!): [Textbook]
+    getUser(id: String!): User
   }
   type User {
     id: ID!
@@ -55,7 +56,8 @@ const resolvers = {
   Query: {
     getTextbooks: () => Textbook.find(),
     getUsers: () => User.find(),
-    getUserTextbooks: (_,{id}) => Textbook.find({id: id})
+    getUserTextbooks: (_,{id}) => Textbook.find({id: id}),
+    getUser: (_,{id}) => User.findById(id)
   },
   Mutation: {
     createUser: async (_, { name, email } ) => {
@@ -77,7 +79,7 @@ const resolvers = {
       return true;
     },
     updateUser: async (_, { id, textbookId } ) => {
-      await User.findByIdAndUpdate(id, {textbookIds: User.textbookIds.push(textbookId)}); 
+      await User.findByIdAndUpdate(id, {$push : {textbookIds: textbookId}}); 
       return true;
     }
   }
