@@ -3,7 +3,7 @@ import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "../Styles/Login.css";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 const addUsersQuery = gql`
     mutation($name: String!, $email: String!) {
@@ -18,11 +18,26 @@ const addUsersQuery = gql`
 class loginPage extends Component {
     constructor(props) {
       super(props);
-  
+
       this.state = {
         name: '',
-        email: ''
+        email: '',
+        redirect: false
       };
+    }
+
+    setRedirect = () => {
+      this.setState({
+        redirect: true
+      });
+    }
+
+    renderRedirect = () => {
+      if (this.state.redirect) {
+        return (
+          <Redirect to='/welcome' />
+        );
+      }
     }
 
     handleSubmit = event => {
@@ -33,7 +48,6 @@ class loginPage extends Component {
                 email: this.state.email
             }
         });
-        this.props.history.push("/");
     }
   
     handleChange = event => {
@@ -63,13 +77,12 @@ class loginPage extends Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <Button
+            {this.renderRedirect()}
+            <Button 
               block
               bsSize="large"
               type="submit"
-            >
-              Login
-            </Button>
+              onClick={this.setRedirect}>Submit</Button>
           </form>
         </div>
       );

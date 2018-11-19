@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import TestQueryPage from './Components/testQuery';
 import LoginPage from './Components/loginPage';
+import WelcomePage from './Components/welcome';
 
 function Routes() {
   return (
@@ -25,6 +26,8 @@ function Routes() {
         <Route exact path="/" component={Home} />
         <Route path="/testquery" component={TestQuery} />
         <Route path="/login" component={Login} /> 
+        <Route path="/welcome" component={Welcome} /> 
+        
       </div>
     </Router>
   );
@@ -40,7 +43,16 @@ function Home() {
 
 function TestQuery() {
   return (
-    <TestQueryPage/>
+    <div>
+      <h1>This is a test query to the GraphQL Server</h1>
+      <TestQueryPage/>
+    </div>
+  );
+}
+
+function Welcome() {
+  return (
+    <WelcomePage/>
   );
 }
 
