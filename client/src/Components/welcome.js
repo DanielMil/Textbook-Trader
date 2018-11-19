@@ -2,33 +2,45 @@ import React, { Component } from 'react';
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 
-const getAllTextbooks = gql` 
+const getUserLoggedIn = gql` 
   {
-    getTextbooks {
+    getUsers {
       id
+      name
+      email
+    }
+  }
+`;
+
+const getUserTextbooks = gql` 
+  {
+    getUsersTextbooks {
       courseCode
     }
   }
 `;
 
-class testQuery extends Component {
+class Welcome extends Component {
   render() {
-    const {data: {loading, getTextbooks}} = this.props;
+    console.log(this.props);
+    const {data: {loading, getUsers}} = this.props;
     if (loading) {
       return null;
     }
     return (
       <div>
-        <h1>Example of test query:</h1>
-        <div>{getTextbooks.map(textbook => (
-          <div key={`${textbook.id}--course-code`}> 
-            <h3>{textbook.courseCode}</h3> 
-            <p>ID: {textbook.id}</p></div>
-          ))}
-          </div>
+        <h1>Welcome Page</h1>
+        <div>
+            <h1>{getUsers[0].name}</h1>
+            <p>{getUsers[0].email}</p>
+        </div>
+        <h3>Textbooks Sold by {getUsers[0].name}:</h3>
+        <ul>
+            
+        </ul>
       </div>
     );
   }
 }
 
-export default graphql(getAllTextbooks)(testQuery);
+export default graphql(getUserLoggedIn)(getUserTextbooks)(Welcome);
