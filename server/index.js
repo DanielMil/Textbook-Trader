@@ -28,21 +28,25 @@ const typeDefs = `
   type Query {
     getUsers: [User]!
     getTextbooks: [Textbook]!
+    getUserTextbooks(id: ID!): [Textbook]
   }
   type User {
     id: ID!
     name: String!  
     email: String!
+    textbookIds: [String]
   }
   type Textbook {
     id: ID!
     courseCode: String!  
+    userID: String
   }
   type Mutation {
     createUser(name: String!, email: String!): User
-    createTextbook(courseCode: String!): Textbook
+    createTextbook(courseCode: String!, userID: String): Textbook
     removeUser(id: ID!): Boolean
     removeTextbook(id: ID!): Boolean
+    updateUser(id: String!, textbookId: String!): Boolean 
   }
 `;
 
@@ -50,7 +54,8 @@ const typeDefs = `
 const resolvers = {
   Query: {
     getTextbooks: () => Textbook.find(),
-    getUsers: () => User.find()
+    getUsers: () => User.find(),
+    getUserTextbooks: (_,{id}) => Textbook.find({id: id})
   },
   Mutation: {
     createUser: async (_, { name, email } ) => {
@@ -58,8 +63,8 @@ const resolvers = {
         await newUser.save();
         return newUser; 
     },
-    createTextbook: async (_, { courseCode } ) => {
-        const newTextbook =  new Textbook({courseCode});
+    createTextbook: async (_, { courseCode, userID } ) => {
+        const newTextbook =  new Textbook({courseCode, userID});
         await newTextbook.save(); 
         return newTextbook;
     },
@@ -69,6 +74,10 @@ const resolvers = {
     },
     removeTextbook: async (_, { id } ) => {
       await Textbook.findByIdAndRemove(id); 
+      return true;
+    },
+    updateUser: async (_, { id, textbookId } ) => {
+      await User.findByIdAndUpdate(id, {textbookIds: User.textbookIds.push(textbookId)}); 
       return true;
     }
   }

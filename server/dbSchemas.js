@@ -2,11 +2,13 @@
 let SchemasTemplates = {
     userSchema : {
         name :  String,
-        email : String
+        email : String,
+        textbookIds : [String]
     },
 
     textbookSchema : {
-        courseCode : String
+        courseCode : String,
+        userID : String
     }
 };
 module.exports = SchemasTemplates;
