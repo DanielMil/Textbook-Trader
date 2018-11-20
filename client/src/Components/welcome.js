@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 
-const getUserLoggedIn = gql` 
+const getUserLoggedIn = gql`
   {
     getUsers {
       id
@@ -12,7 +12,7 @@ const getUserLoggedIn = gql`
   }
 `;
 
-const getUserTextbooks = gql` 
+const getUserTextbooks = gql`
   {
     getUsersTextbooks {
       courseCode
@@ -36,11 +36,11 @@ class Welcome extends Component {
         </div>
         <h3>Textbooks Sold by {getUsers[0].name}:</h3>
         <ul>
-            
+
         </ul>
       </div>
     );
   }
 }
 
-export default graphql(getUserLoggedIn)(getUserTextbooks)(Welcome);
+// export default graphql(getUserLoggedIn)(getUserTextbooks)(Welcome);

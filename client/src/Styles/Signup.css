@@ -1,9 +1,9 @@
 @media all and (min-width: 480px) {
-   .Signup {
+   .Login {
      padding: 60px 0;
    }
 
-   .Signup form {
+   .Login form {
      margin: 0 auto;
      max-width: 320px;
    }
@@ -12,12 +12,6 @@
      font-family: helvetica;
      color: #00b3b3;
      letter-spacing: 3px;
-
-   }
-
-   .contentText {
-     font-family: helvetica;
-     color: #696969;
    }
 
    .formField {

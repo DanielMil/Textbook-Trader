@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import {
- Button, FormGroup, FormControl
+ Button, FormGroup, FormControl, ControlLabel
 } from "react-bootstrap";
-import "../Styles/Login.css";
+import "../Styles/Signup.css";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { Redirect } from "react-router-dom";
+
+//Password to be included in functions below
 
 const addUsersQuery = gql`
    mutation($name: String!, $email: String!) {
@@ -17,7 +19,7 @@ const addUsersQuery = gql`
    }
 `;
 
-class loginPage extends Component {
+class signupPage extends Component {
    constructor(props) {
      super(props);
 
@@ -26,6 +28,7 @@ class loginPage extends Component {
        email: '',
        redirect: false
      };
+
    }
 
    setRedirect = () => {
@@ -60,14 +63,14 @@ class loginPage extends Component {
 
    render() {
      return (
-       <div className="Login">
+       <div className="Signup">
          <form onSubmit={this.handleSubmit}>
-           <h2 className="contentHeading">Login to your account</h2>
-           {/*
+           <h2 className="contentHeading">Get Started</h2>
            <FormGroup
              className="formField"
              controlId="name"
              bsSize="large">
+             <ControlLabel></ControlLabel>
              <FormControl
                className="formInputControl"
                placeholder="Name"
@@ -76,11 +79,11 @@ class loginPage extends Component {
                type="name"
              />
            </FormGroup>
-           */}
            <FormGroup
              className="formField"
              controlId="email"
              bsSize="large">
+             <ControlLabel></ControlLabel>
              <FormControl
                autoFocus
                className="formInputControl"
@@ -90,7 +93,7 @@ class loginPage extends Component {
                onChange={this.handleChange}
              />
            </FormGroup>
-           <FormGroup
+             <FormGroup
              className="formField"
              controlId="password"
              bsSize="large">
@@ -98,6 +101,19 @@ class loginPage extends Component {
                autoFocus
                className="formInputControl"
                placeholder="Password"
+               type="password"
+               value={this.state.email}
+               onChange={this.handleChange}
+             />
+           </FormGroup>
+           <FormGroup
+             className="formField"
+             controlId="confirmpassword"
+             bsSize="large">
+             <FormControl
+               autoFocus
+               className="formInputControl"
+               placeholder="Confirm Password"
                type="password"
                value={this.state.email}
                onChange={this.handleChange}
@@ -111,11 +127,10 @@ class loginPage extends Component {
              type="submit"
              onClick={this.setRedirect}>Submit</Button>
 
-           <h4 className="contentText">Don't have an account? <a href="/signup">Register now</a></h4>
          </form>
        </div>
      );
    }
  }
 
-export default graphql(addUsersQuery)(loginPage);
+export default graphql(addUsersQuery)(signupPage);
