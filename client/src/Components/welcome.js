@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql, compose } from "react-apollo";
 
 const getUserLoggedIn = gql`
   {
@@ -12,18 +12,20 @@ const getUserLoggedIn = gql`
   }
 `;
 
-const getUserTextbooks = gql`
+const getTextbooks = gql`
   {
-    getUsersTextbooks {
+    getUserTextbooks {
       courseCode
     }
   }
 `;
 
 class Welcome extends Component {
+
   render() {
     console.log(this.props);
-    const {data: {loading, getUsers}} = this.props;
+   // const getUsers  = this.props.getUserLoggedIn;
+    const { data: {loading, getUsers} } = this.props; 
     if (loading) {
       return null;
     }
@@ -36,11 +38,15 @@ class Welcome extends Component {
         </div>
         <h3>Textbooks Sold by {getUsers[0].name}:</h3>
         <ul>
-
+            {/* <li>{Textbooks[0].courseCode}</li> */}
         </ul>
       </div>
     );
   }
 }
 
-// export default graphql(getUserLoggedIn)(getUserTextbooks)(Welcome);
+// export default compose(
+//     graphql(getUserLoggedIn, {name : 'getUserLoggedIn'})
+// )(Welcome);
+
+export default graphql(getUserLoggedIn)(Welcome);

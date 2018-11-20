@@ -30,7 +30,7 @@ function Routes() {
        <Route exact path="/" component={Home} />
        <Route path="/testquery" component={TestQuery} />
        <Route path="/login" component={Login} />
-       {/*<Route path="/welcome" component={Welcome} />*/}
+       <Route path="/welcome" component={Welcome} />
        <Route path="/signup" component={Signup} />
 
      </div>
@@ -55,11 +55,11 @@ function TestQuery() {
  );
 }
 
-// function Welcome() {
-//  return (
-//    <WelcomePage/>
-//  );
-// }
+function Welcome() {
+ return (
+   <WelcomePage/>
+ );
+}
 
 function Login() {
  return (
