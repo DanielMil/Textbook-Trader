@@ -13,8 +13,8 @@ const getUserLoggedIn = gql`
 `;
 
 const getTextbooks = gql`
-  {
-    getUserTextbooks {
+  query($userID: String!){
+    getUserTextbooks (userID: $userID){
       courseCode
     }
   }
@@ -22,31 +22,51 @@ const getTextbooks = gql`
 
 class Welcome extends Component {
 
-  render() {
-    console.log(this.props);
-   // const getUsers  = this.props.getUserLoggedIn;
-    const { data: {loading, getUsers} } = this.props; 
-    if (loading) {
+  getAllTextbooks () {
+    let data = this.props.getUserLoggedIn;
+    if (data.loading) {
       return null;
     }
+    console.log(data);
+    this.props.getTextbooks({
+      variables: {
+          name: data.getUsers[0].id
+      }
+    });
+
+    // console.log(data);
+    // if(data.loading){
+    //     return( <option disabled>Loading textbooks</option> );
+    // } else {
+    //     return data.authors.map(author => {
+    //       return( <option key={ author.id } value={author.id}>{ author.name }</option> );
+    //     });
+    // }
+  }
+
+  render() {
+    let data  = this.props.getUserLoggedIn;
+    if (data.loading) {
+      return null;
+    }
+
     return (
       <div>
         <h1>Welcome Page</h1>
         <div>
-            <h1>{getUsers[0].name}</h1>
-            <p>{getUsers[0].email}</p>
+            <h1>{data.getUsers[0].name}</h1>
+            <p>{data.getUsers[0].email}</p>
         </div>
-        <h3>Textbooks Sold by {getUsers[0].name}:</h3>
+        <h3>Textbooks Sold by {data.getUsers[0].name}:</h3>
         <ul>
-            {/* <li>{Textbooks[0].courseCode}</li> */}
+            { this.getAllTextbooks }
         </ul>
       </div>
     );
   }
 }
 
-// export default compose(
-//     graphql(getUserLoggedIn, {name : 'getUserLoggedIn'})
-// )(Welcome);
-
-export default graphql(getUserLoggedIn)(Welcome);
+export default compose(
+    graphql(getUserLoggedIn, {name : 'getUserLoggedIn'}),
+    graphql(getTextbooks, {name: "getTextbooks"})
+)(Welcome);
