@@ -25,7 +25,7 @@ class testQuery extends Component {
             <h3>{textbook.courseCode}</h3> 
             <p>ID: {textbook.id}</p></div>
           ))}
-          </div>
+        </div>
       </div>
     );
   }
