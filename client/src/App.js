@@ -6,6 +6,7 @@ import LoginPage from './Pages/loginPage';
 import WelcomePage from './Pages/welcome';
 import SignupPage from './Pages/signupPage';
 import Header from './Components/Header'
+import HomePage from './Pages/home'
 
 function Routes() {
  return (
@@ -14,8 +15,6 @@ function Routes() {
 
        <Header/>
        
-       <hr />
-
        <Route exact path="/" component={Home} />
        <Route path="/testquery" component={TestQuery} />
        <Route path="/login" component={Login} />
@@ -29,9 +28,7 @@ function Routes() {
 
 function Home() {
  return (
-   <div>
-     <h2>Home</h2>
-   </div>
+    <HomePage/>
  );
 }
 

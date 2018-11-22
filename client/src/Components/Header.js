@@ -3,6 +3,7 @@ import {
     Navbar, Nav, NavItem
    } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
+import "../Styles/Header.css";
 
 class Header extends Component {
 
@@ -16,7 +17,7 @@ class Header extends Component {
             <Navbar>
             <Navbar.Header>
                 <Navbar.Brand>
-                <a href="/home">Textbook Trader</a>
+                    <a className="Header-Title" href="/">Textbook Trader</a>
                 </Navbar.Brand>
                 <Navbar.Toggle />
             </Navbar.Header>
