@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import User from './getUser'
-import UserTextbooks from './getUserTextbooks'
+import User from '../Components/getUser'
+import UserTextbooks from '../Components/getUserTextbooks'
 
 class Welcome extends Component {
 
