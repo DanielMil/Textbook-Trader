@@ -2,7 +2,8 @@ const { GraphQLServer } = require('graphql-yoga');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const databaseSchematics = require('./dbSchemas.js');
-const bcrypt = require('bcryptjs'); 
+const typeDefs = require('./typedefs');
+
 
 const options = {
     port: 8000
@@ -24,36 +25,6 @@ var textbookSchema = new Schema(databaseSchematics.textbookSchema, {collection: 
 //Create collection
 const Textbook = mongoose.model("Textbook", textbookSchema);
 
-//TODO: Move this to seperate file
-const typeDefs = `
-  type Query {
-    getUsers: [User]!
-    getTextbooks: [Textbook]!
-    getUserTextbooks(userID: String!): [Textbook]
-    getUser(id: String!): User
-    login(name:String!, password:String!): Boolean!
-  }
-  type User {
-    id: ID!
-    name: String!  
-    email: String!
-    textbookIds: [String]
-    password: String!
-  }
-  type Textbook {
-    id: ID!
-    courseCode: String!  
-    userID: String
-  }
-  type Mutation {
-    createUser(name: String!, email: String!, password: String!): User
-    createTextbook(courseCode: String!, userID: String): Textbook
-    removeUser(id: ID!): Boolean
-    removeTextbook(id: ID!): Boolean
-  }
-`;
-
-//TODO: Move this to seperate file
 const resolvers = {
   Query: {
     getTextbooks: () => Textbook.find(),
