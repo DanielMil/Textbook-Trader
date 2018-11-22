@@ -1,30 +1,19 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import TestQueryPage from './Components/testQuery';
-import LoginPage from './Components/loginPage';
-import WelcomePage from './Components/welcome';
-import SignupPage from './Components/signupPage';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import TestQueryPage from './Pages/testQuery';
+import LoginPage from './Pages/loginPage';
+import WelcomePage from './Pages/welcome';
+import SignupPage from './Pages/signupPage';
+import Header from './Components/Header'
 
 function Routes() {
  return (
    <Router>
      <div>
-       <ul>
-         <li>
-           <Link to="/">Home</Link>
-         </li>
-         <li>
-           <Link to="/testQuery">About</Link>
-         </li>
-         <li>
-           <Link to="/login">Login</Link>
-         </li>
-         <li>
-           <Link to="/signup">Signup</Link>
-         </li>
-       </ul>
 
+       <Header/>
+       
        <hr />
 
        <Route exact path="/" component={Home} />
