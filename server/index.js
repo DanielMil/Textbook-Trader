@@ -1,14 +1,15 @@
 const { GraphQLServer } = require('graphql-yoga');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
-const databaseSchematics = require('./dbSchemas.js') 
+const databaseSchematics = require('./dbSchemas.js');
+const bcrypt = require('bcryptjs'); 
 
 const options = {
     port: 8000
 };
 
 const DB = process.env.dbKey; 
-mongoose.connect(DB);
+mongoose.connect(DB, { useNewUrlParser: true });
 var Schema = mongoose.Schema;
 
 //Create User collection schema
@@ -30,12 +31,14 @@ const typeDefs = `
     getTextbooks: [Textbook]!
     getUserTextbooks(userID: String!): [Textbook]
     getUser(id: String!): User
+    login(name:String!, password:String!): Boolean!
   }
   type User {
     id: ID!
     name: String!  
     email: String!
     textbookIds: [String]
+    password: String!
   }
   type Textbook {
     id: ID!
@@ -43,11 +46,10 @@ const typeDefs = `
     userID: String
   }
   type Mutation {
-    createUser(name: String!, email: String!): User
+    createUser(name: String!, email: String!, password: String!): User
     createTextbook(courseCode: String!, userID: String): Textbook
     removeUser(id: ID!): Boolean
     removeTextbook(id: ID!): Boolean
-    updateUser(id: String!, textbookId: String!): Boolean 
   }
 `;
 
@@ -57,17 +59,39 @@ const resolvers = {
     getTextbooks: () => Textbook.find(),
     getUsers: () => User.find(),
     getUserTextbooks: (_,{id}) => Textbook.find({id: id}),
-    getUser: (_,{id}) => User.findById(id)
+    getUser: (_,{id}) => User.findById(id),
+    login: async (_, {name, password}) => {
+
+      let user = await User.findOne({name: name}); // Find user by username
+      let hash = user.password; //Get the hashed password
+      let match = await bcrypt.compare(password, hash); //compare the inputed pass with hashed pass
+
+      if (match) {
+
+        //Find a user with the username and hash
+        let user = await User.collection.findOne({
+          name: name, 
+          password: hash
+        });
+
+        //if a the user exists, return true
+        if (user) 
+          return true
+      }
+      return false;
+    }
   },
   Mutation: {
-    createUser: async (_, { name, email } ) => {
-        const newUser = new User({name, email});
+    createUser: async (_, { name, email, password } ) => {
+        let hashedPass = await bcrypt.hash(password, 12);
+        const newUser = new User({name, email, password: hashedPass});
         await newUser.save();
-        return newUser; 
+        return newUser;
     },
     createTextbook: async (_, { courseCode, userID } ) => {
         const newTextbook =  new Textbook({courseCode, userID});
-        await newTextbook.save(); 
+        await newTextbook.save();
+        await User.findByIdAndUpdate(userID, {$push : {textbookIds: newTextbook.id}});
         return newTextbook;
     },
     removeUser: async (_, { id } ) => {
@@ -75,11 +99,13 @@ const resolvers = {
       return true;
     },
     removeTextbook: async (_, { id } ) => {
+      let tb = await Textbook.findById(id);
+      let userID = tb.userID;
+      //remove texbookID from user array
+      await User.findByIdAndUpdate(userID, {$pull : {textbookIds: id}});
+      //delete textbook from DB
       await Textbook.findByIdAndRemove(id); 
-      return true;
-    },
-    updateUser: async (_, { id, textbookId } ) => {
-      await User.findByIdAndUpdate(id, {$push : {textbookIds: textbookId}}); 
+      
       return true;
     }
   }

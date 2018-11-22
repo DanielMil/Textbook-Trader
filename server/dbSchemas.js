@@ -3,7 +3,8 @@ let SchemasTemplates = {
     userSchema : {
         name :  String,
         email : String,
-        textbookIds : [String]
+        textbookIds : [String],
+        password: String
     },
 
     textbookSchema : {
