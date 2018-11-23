@@ -152,7 +152,7 @@ class SignupPage extends Component {
     }
 }
 
-export default withStyles(style)(SignUp);
+export default withStyles(style)(SignupPage);
 
 const styles = {
     cancel: {

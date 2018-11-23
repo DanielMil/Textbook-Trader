@@ -7,3 +7,8 @@
     margin-bottom: 50px;
     color: #00b3b3;
 }
+
+.Container {
+    width: 80%; 
+    margin: 0px auto;
+}
