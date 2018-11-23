@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { Tabs, Tab } from 'react-bootstrap';
-import { Card, CardImg, CardText, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
-import { Row, Col, Grid, FormGroup, FormControl, ControlLabel, Table , Button} from "react-bootstrap";
+import { Card, CardImg, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
+import { Row, Col, Grid, Button} from "react-bootstrap";
 import "../Styles/profile.css";
 
 const getAllTextbooks = gql` 

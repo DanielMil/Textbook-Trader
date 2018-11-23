@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-
+import { Redirect } from "react-router-dom";
 import { auth } from '../Services';
 
 const INITIAL_STATE = {
@@ -20,7 +20,7 @@ const style = theme => ({
   },
 });
 
-class SignUp extends React.Component {
+class SignupPage extends Component {
 
     constructor(props) {
         super(props);
@@ -33,14 +33,11 @@ class SignUp extends React.Component {
     }
 
     cancelSignUp = (e) => {
-        console.log("cancel Sign Up");
-        this.props.handleSignUp();
+      return (<Redirect to="/login" />);
     }
 
     handleSignUp = (e) => {
         const {
-            fname,
-            lname,
             email,
             password,
         } = this.state;
@@ -48,7 +45,9 @@ class SignUp extends React.Component {
         auth.doCreateUserWithEmailAndPassword(email, password)
             .then(authUser => {
                 this.setState({ ...INITIAL_STATE });
-            }).then(console.log(fname+' '+lname))
+            }).then(redirect => {
+              return (<Redirect to="/" />);
+            })
             .catch(error => {
                 this.setState(this.handleChange('error', error));
                 console.log(error);
@@ -71,124 +70,83 @@ class SignUp extends React.Component {
           classes
         } = this.props;
 
-        return <div style={styles.loginForm}>
+        return <div>
+                  <div>
+                    <h1>
+                      Sign Up
+                    </h1>
+                  </div>
+                  <form onSubmit={this.handleSignUp}>
+                  <TextField
+                    id="fname"
+                    label="First Name"
+                    value={fname}
+                    onChange={event => this.handleChange('fname', event.target.value)}
+                    type="text"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    margin="normal"
+                  />
+                  <TextField
+                    id="lname"
+                    label="Last Name"
+                    value={lname}
+                    onChange={event => this.handleChange('lname', event.target.value)}
+                    type="text"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    margin="normal"
+                  />
+                  <TextField
+                    id="email"
+                    label="Email"
+                    value={email}
+                    onChange={event => this.handleChange('email', event.target.value)}
+                    type="email"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    margin="normal"
+                  />
+                  <TextField
+                    id="password"
+                    label="Password"
+                    value={password}
+                    onChange={event => this.handleChange('password', event.target.value)}
+                    type="password"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    margin="normal"
+                  />
+                  <TextField
+                    id="confirmPassword"
+                    label="Confirm Password"
+                    value={confirmPassword}
+                    onChange={event => this.handleChange('confirmPassword', event.target.value)}
+                    type="password"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                    margin="normal"
+                  />
                     <div>
-                      <h1 style={styles.title}>
+                      <Button className={classes.button} onClick={this.cancelSignUp}>Cancel</Button>
+                      <Button variant="contained" type="submit" className={classes.button}>
                         Sign Up
-                      </h1>
+                      </Button>
                     </div>
-                    <form onSubmit={this.handleSignUp}>
-                    <TextField
-                      id="fname"
-                      label="First Name"
-                      value={fname}
-                      onChange={event => this.handleChange('fname', event.target.value)}
-                      type="text"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <TextField
-                      id="lname"
-                      label="Last Name"
-                      value={lname}
-                      onChange={event => this.handleChange('lname', event.target.value)}
-                      type="text"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <TextField
-                      id="email"
-                      label="Email"
-                      value={email}
-                      onChange={event => this.handleChange('email', event.target.value)}
-                      type="email"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <TextField
-                      id="password"
-                      label="Password"
-                      value={password}
-                      onChange={event => this.handleChange('password', event.target.value)}
-                      type="password"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <TextField
-                      id="confirmPassword"
-                      label="Confirm Password"
-                      value={confirmPassword}
-                      onChange={event => this.handleChange('confirmPassword', event.target.value)}
-                      type="password"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      fullWidth
-                      margin="normal"
-                    />
-                      <div style={styles.loginRow}>
-                        <Button className={classes.button} onClick={this.cancelSignUp}>Cancel</Button>
-                        <Button variant="contained" type="submit" className={classes.button}>
-                          Sign Up
-                        </Button>
-                      </div>
-                    </form>
+                  </form>
                     
                 </div>
     }
 }
 
-export default withStyles(style)(SignUp);
-
-
-const styles = {
-    cancel: {
-        padding: "7px 12px",
-        border: '1px solid grey',
-        boxShadow: '2px 5px 5px 0px rgba(92,92,92,1)',
-        display: 'inline-block',
-        marginRight: '10px',
-        cursor: 'pointer',
-        fontSize: '0.9em',
-    },
-    submit: {
-        padding: "7px 12px",
-        border: '1px solid grey',
-        boxShadow: '2px 5px 5px 0px rgba(92,92,92,1)',
-        cursor: 'pointer',
-        display: 'inline-block',
-        fontSize: '0.9em',
-    },
-    input: {
-        width: '100%',
-        height: '25px',
-        marginBottom: '20px',
-    },
-    loginForm: {
-        width: '300px',
-    },
-    loginRow: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '20px',
-        marginTop: '20px'
-    },
-    title: {
-      fontSize: '3em',
-      marginBottom: '0.25em',
-      fontWeight: '200',
-    },
-}
+export default withStyles(style)(SignupPage);
