@@ -5,6 +5,7 @@ import TestQueryPage from './Pages/testQuery';
 import LoginPage from './Pages/loginPage';
 import WelcomePage from './Pages/welcome';
 import SignupPage from './Pages/signupPage';
+import ProfilePage from './Pages/profile';
 import Header from './Components/Header'
 import HomePage from './Pages/home'
 
@@ -17,6 +18,7 @@ function Routes() {
        
        <Route exact path="/" component={Home} />
        <Route path="/testquery" component={TestQuery} />
+       <Route path="/profile" component={Profile} />
        <Route path="/login" component={Login} />
        <Route path="/welcome" component={Welcome} />
        <Route path="/signup" component={Signup} />
@@ -40,6 +42,14 @@ function TestQuery() {
    </div>
  );
 }
+
+function Profile() {
+  return (
+    <div>
+      <ProfilePage/>
+    </div>
+  );
+ }
 
 function Welcome() {
  return (
