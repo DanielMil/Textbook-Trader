@@ -1,11 +1,10 @@
-.Container {
-    width: 80%; 
-    margin: 0px auto;
+h1 {
+    margin-left: 10px; 
 }
 
-/* .Tabs {
+.Tabs {
     padding: 10px;
-} */
+} 
 
 .cards {
     padding: 5px;

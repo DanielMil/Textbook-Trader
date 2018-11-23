@@ -4,7 +4,7 @@ import { graphql } from "react-apollo";
 import { Tabs, Tab } from 'react-bootstrap';
 import { Card, CardImg, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
 import { Row, Col, Grid, Button} from "react-bootstrap";
-import "../Styles/profile.css";
+import "../../Styles/profile.css";
 
 const getAllTextbooks = gql` 
   {
