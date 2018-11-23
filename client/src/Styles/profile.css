@@ -1,0 +1,19 @@
+.Container {
+    width: 80%; 
+    margin: 0px auto;
+}
+
+/* .Tabs {
+    padding: 10px;
+} */
+
+.cards {
+    padding: 5px;
+    margin-top: 10px;
+    border: solid 0.2px lightgrey;
+    margin-left: -20px; 
+}
+
+.btns {
+    margin: 3px;
+}

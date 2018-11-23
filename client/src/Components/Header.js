@@ -32,8 +32,8 @@ class Header extends Component {
                 <NavItem eventKey={3} href="/welcome">
                     Welcome
                 </NavItem>
-                <NavItem eventKey={4} href="/testQuery">
-                    Test Query
+                <NavItem eventKey={4} href="/profile">
+                    Profile
                 </NavItem>
             </Nav>
             </Navbar.Collapse>

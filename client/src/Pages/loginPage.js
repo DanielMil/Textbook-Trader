@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import SignUp from './signupPage';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
@@ -22,7 +22,7 @@ const style = theme => ({
   },
 });
 
-class Login extends React.Component {
+class LoginPage extends Component {
     constructor(props) {
         super(props);
 
@@ -124,7 +124,7 @@ class Login extends React.Component {
     }
 }
 
-export default withStyles(style)(Login);
+export default withStyles(style)(LoginPage);
 
 
 const styles = {

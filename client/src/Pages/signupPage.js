@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-
+import { Redirect, Link } from "react-router-dom";
 import { auth } from '../Services';
 
 const INITIAL_STATE = {
@@ -21,7 +21,7 @@ const style = theme => ({
   },
 });
 
-class SignUp extends React.Component {
+class SignupPage extends Component {
 
     constructor(props) {
         super(props);
@@ -34,14 +34,11 @@ class SignUp extends React.Component {
     }
 
     cancelSignUp = (e) => {
-        console.log("cancel Sign Up");
-        this.props.handleSignUp();
+      return (<Link to="/login" />);
     }
 
     handleSignUp = (e) => {
         const {
-            fname,
-            lname,
             email,
             password,
         } = this.state;
@@ -49,7 +46,9 @@ class SignUp extends React.Component {
         auth.doCreateUserWithEmailAndPassword(email, password)
             .then(authUser => {
                 this.setState({ ...INITIAL_STATE });
-            }).then(console.log(fname+' '+lname))
+            }).then(redirect => {
+              return (<Redirect to="/" />);
+            })
             .catch(error => {
                 this.setState(this.handleChange('error', error));
                 console.log(error);
@@ -155,7 +154,6 @@ class SignUp extends React.Component {
 
 export default withStyles(style)(SignUp);
 
-
 const styles = {
     cancel: {
         padding: "7px 12px",
@@ -236,3 +234,4 @@ const styles = {
         padding: '20px'
     },
 }
+
