@@ -1,33 +1,118 @@
-import React from 'react';
-import './App.css';
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import LoginPage from './Pages/loginPage';
-import WelcomePage from './Pages/welcome';
-import SignupPage from './Pages/signupPage';
-import ProfilePage from './Pages/profile';
-import Header from './Components/Header'
-import HomePage from './Pages/home'
+import React, { Component } from 'react'
+import { Route, BrowserRouter, Link, Redirect, Switch } from 'react-router-dom'
+import { logout } from './helpers/auth'
+import { firebaseAuth } from './config/constants'
 import Footer from "./Components/Footer"
+import ProfilePage from './Components/protected/profile';
+import Login from './Pages/loginPage'
+import Register from './Pages/signupPage'
+import Home from './Pages/home'
+import {
+  Navbar, Nav,
+ } from "react-bootstrap";
 
-function App() {
- return (
-   <Router>
-     <div>
-
-       <Header/>
-       
-       <Route exact path="/" component={() => { return <HomePage/> } } />
-       <Route path="/profile" component={() => { return <ProfilePage/> } } />
-       <Route path="/login" component={() => { return <LoginPage/> } } />
-       <Route path="/welcome" component={() => {return <WelcomePage/> } } />
-       <Route path="/signup" component={() => {return <SignupPage/> } } />
-
-       <Footer/>
-
-     </div>
-
-   </Router>
- );
+function PrivateRoute ({component: Component, authed, ...rest}) {
+  return (
+    <Route
+      {...rest}
+      render={(props) => authed === true
+        ? <Component {...props} />
+        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+    />
+  )
 }
 
-export default App;
+function PublicRoute ({component: Component, authed, ...rest}) {
+  return (
+    <Route
+      {...rest}
+      render={(props) => authed === false
+        ? <Component {...props} />
+        : <Redirect to='/' />}
+    />
+  )
+}
+
+export default class App extends Component {
+  state = {
+    authed: false,
+    loading: true,
+  }
+  componentDidMount () {
+    this.removeListener = firebaseAuth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({
+          authed: true,
+          loading: false,
+        })
+      } else {
+        this.setState({
+          authed: false,
+          loading: false
+        })
+      }
+    })
+  }
+  componentWillUnmount () {
+    this.removeListener()
+  }
+  render() {
+    return this.state.loading === true ? <h1>Loading</h1> : (
+      <BrowserRouter>
+        <div>
+
+          {/* Navbar Component. Can be made into seperate component. */}
+          <Navbar>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <Link to="/" className="navbar-brand">Textbook Trader</Link>
+              </Navbar.Brand>
+              <Navbar.Toggle />
+            </Navbar.Header>
+
+            <Navbar.Collapse>
+            <Nav pullRight>
+              
+                  {this.state.authed
+                  ? <div>
+                  <Link to="/profile" className="navbar-brand">Profile</Link>
+                      <button
+                        style={{border: 'none', background: 'transparent'}}
+                        onClick={() => {
+                          logout()
+                        }}
+                        className="navbar-brand">Logout</button>
+                    </div>
+                  : 
+                    <div>
+                      <Link to="/login" className="navbar-brand">Login</Link>
+                      <Link to="/register" className="navbar-brand">Register</Link>
+                    </div>
+                    }
+                
+            </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+
+          {/* Define Routes Here */}
+          <div className="container">
+            <div className="row">
+              <Switch>
+                <Route path='/' exact component={Home} />
+                <PublicRoute authed={this.state.authed} path='/login' component={Login} />
+                <PublicRoute authed={this.state.authed} path='/register' component={Register} />
+                <PrivateRoute authed={this.state.authed} path='/profile' component={ProfilePage} />
+                <Route render={() => <h3>No Match</h3>} />
+              </Switch>
+            </div>
+          </div>
+            
+          {/* Footer Component */}
+          <Footer/>
+
+        </div>
+      </BrowserRouter>
+    );
+  }
+}
+
