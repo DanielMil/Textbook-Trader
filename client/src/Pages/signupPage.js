@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { auth } from '../Services';
 
 const INITIAL_STATE = {
@@ -33,7 +33,7 @@ class SignupPage extends Component {
     }
 
     cancelSignUp = (e) => {
-      return (<Redirect to="/login" />);
+      return (<Link to="/login" />);
     }
 
     handleSignUp = (e) => {

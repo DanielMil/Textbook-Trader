@@ -23,7 +23,7 @@ class profile extends Component {
     }
 
     return (
-        <div>
+        <div className="Container">
             <h1>Profile</h1>
             <Tabs className="Tabs" defaultActiveKey={1} animation={false} id="noanim-tab-example">
                 <Tab eventKey={1} title="Textbooks">
@@ -55,7 +55,7 @@ class profile extends Component {
                 <Tab eventKey={3} title="Account Settings">
                     Tab 3 content
                 </Tab>
-            </Tabs>;
+            </Tabs>
         </div>
     );
   }
