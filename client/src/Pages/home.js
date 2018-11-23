@@ -64,7 +64,7 @@ class HomePage extends Component {
               <th>Image</th>
               <th>Coure Code</th>
               <th>Price</th>
-              <th>Info</th>
+              <th>Textbook Name</th>
             </tr>
           </thead>
           <tbody>

@@ -1,136 +1,194 @@
-import React, { Component } from "react";
-import {
- Button, FormGroup, FormControl, ControlLabel
-} from "react-bootstrap";
-import "../Styles/Signup.css";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import { Redirect } from "react-router-dom";
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 
-//Password to be included in functions below
+import { auth } from '../Services';
 
-const addUsersQuery = gql`
-   mutation($name: String!, $email: String!) {
-       createUser(name: $name, email: $email) {
-           id
-           name
-           email
-       }
-   }
-`;
+const INITIAL_STATE = {
+    email: '',
+    fname: '',
+    lname: '',
+    password: '',
+    confirmPassword: '',
+    error: '',
+}
 
-class signupPage extends Component {
-   constructor(props) {
-     super(props);
+const style = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+});
 
-     this.state = {
-       name: '',
-       email: '',
-       redirect: false
-     };
+class SignUp extends React.Component {
 
-   }
+    constructor(props) {
+        super(props);
 
-   setRedirect = () => {
-     this.setState({
-       redirect: true
-     });
-   }
+        this.state = { ...INITIAL_STATE }
+    }
 
-   renderRedirect = () => {
-     if (this.state.redirect) {
-       return (
-         <Redirect to='/welcome' />
-       );
-     }
-   }
+    handleChange = (name, value) => {
+        this.setState({[name]: value});
+    }
 
-   handleSubmit = event => {
-       event.preventDefault();
-       this.props.mutate({
-           variables: {
-               name: this.state.name,
-               email: this.state.email
-           }
-       });
-   }
+    cancelSignUp = (e) => {
+        console.log("cancel Sign Up");
+        this.props.handleSignUp();
+    }
 
-   handleChange = event => {
-     this.setState({
-       [event.target.id]: event.target.value
-     });
-   }
+    handleSignUp = (e) => {
+        const {
+            fname,
+            lname,
+            email,
+            password,
+        } = this.state;
+        
+        auth.doCreateUserWithEmailAndPassword(email, password)
+            .then(authUser => {
+                this.setState({ ...INITIAL_STATE });
+            }).then(console.log(fname+' '+lname))
+            .catch(error => {
+                this.setState(this.handleChange('error', error));
+                console.log(error);
+            });
 
-   render() {
-     return (
-       <div className="Signup">
-         <form onSubmit={this.handleSubmit}>
-           <h2 className="contentHeading">Get Started</h2>
-           <FormGroup
-             className="formField"
-             controlId="name"
-             bsSize="large">
-             <ControlLabel></ControlLabel>
-             <FormControl
-               className="formInputControl"
-               placeholder="Name"
-               value={this.state.name}
-               onChange={this.handleChange}
-               type="name"
-             />
-           </FormGroup>
-           <FormGroup
-             className="formField"
-             controlId="email"
-             bsSize="large">
-             <ControlLabel></ControlLabel>
-             <FormControl
-               autoFocus
-               className="formInputControl"
-               placeholder="Email"
-               type="email"
-               value={this.state.email}
-               onChange={this.handleChange}
-             />
-           </FormGroup>
-             <FormGroup
-             className="formField"
-             controlId="password"
-             bsSize="large">
-             <FormControl
-               autoFocus
-               className="formInputControl"
-               placeholder="Password"
-               type="password"
-               value={this.state.email}
-               onChange={this.handleChange}
-             />
-           </FormGroup>
-           <FormGroup
-             className="formField"
-             controlId="confirmpassword"
-             bsSize="large">
-             <FormControl
-               autoFocus
-               className="formInputControl"
-               placeholder="Confirm Password"
-               type="password"
-               value={this.state.email}
-               onChange={this.handleChange}
-             />
-           </FormGroup>
-           {this.renderRedirect()}
-           <Button
-             className="formButton"
-             bsStyle="primary"
-             bsSize="large"
-             type="submit"
-             onClick={this.setRedirect}>Submit</Button>
+            e.preventDefault();
+    }
 
-         </form>
-       </div>
-     );
-   }
- }
+    render() {
 
-export default graphql(addUsersQuery)(signupPage);
+        const {
+            fname,
+            lname,
+            email,
+            password,
+            confirmPassword,
+        } = this.state;
+
+        const {
+          classes
+        } = this.props;
+
+        return <div style={styles.loginForm}>
+                    <div>
+                      <h1 style={styles.title}>
+                        Sign Up
+                      </h1>
+                    </div>
+                    <form onSubmit={this.handleSignUp}>
+                    <TextField
+                      id="fname"
+                      label="First Name"
+                      value={fname}
+                      onChange={event => this.handleChange('fname', event.target.value)}
+                      type="text"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextField
+                      id="lname"
+                      label="Last Name"
+                      value={lname}
+                      onChange={event => this.handleChange('lname', event.target.value)}
+                      type="text"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextField
+                      id="email"
+                      label="Email"
+                      value={email}
+                      onChange={event => this.handleChange('email', event.target.value)}
+                      type="email"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextField
+                      id="password"
+                      label="Password"
+                      value={password}
+                      onChange={event => this.handleChange('password', event.target.value)}
+                      type="password"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextField
+                      id="confirmPassword"
+                      label="Confirm Password"
+                      value={confirmPassword}
+                      onChange={event => this.handleChange('confirmPassword', event.target.value)}
+                      type="password"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      fullWidth
+                      margin="normal"
+                    />
+                      <div style={styles.loginRow}>
+                        <Button className={classes.button} onClick={this.cancelSignUp}>Cancel</Button>
+                        <Button variant="contained" type="submit" className={classes.button}>
+                          Sign Up
+                        </Button>
+                      </div>
+                    </form>
+                    
+                </div>
+    }
+}
+
+export default withStyles(style)(SignUp);
+
+
+const styles = {
+    cancel: {
+        padding: "7px 12px",
+        border: '1px solid grey',
+        boxShadow: '2px 5px 5px 0px rgba(92,92,92,1)',
+        display: 'inline-block',
+        marginRight: '10px',
+        cursor: 'pointer',
+        fontSize: '0.9em',
+    },
+    submit: {
+        padding: "7px 12px",
+        border: '1px solid grey',
+        boxShadow: '2px 5px 5px 0px rgba(92,92,92,1)',
+        cursor: 'pointer',
+        display: 'inline-block',
+        fontSize: '0.9em',
+    },
+    input: {
+        width: '100%',
+        height: '25px',
+        marginBottom: '20px',
+    },
+    loginForm: {
+        width: '300px',
+    },
+    loginRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '20px',
+        marginTop: '20px'
+    },
+    title: {
+      fontSize: '3em',
+      marginBottom: '0.25em',
+      fontWeight: '200',
+    },
+}

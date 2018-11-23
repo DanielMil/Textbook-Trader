@@ -1,121 +1,203 @@
-import React, { Component } from "react";
-import {
- Button, FormGroup, FormControl
-} from "react-bootstrap";
-import "../Styles/Login.css";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import { Redirect } from "react-router-dom";
+import React from "react";
+import SignUp from './signupPage';
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
-const addUsersQuery = gql`
-   mutation($name: String!, $email: String!) {
-       createUser(name: $name, email: $email) {
-           id
-           name
-           email
-       }
-   }
-`;
+import { auth } from '../Services';
 
-class loginPage extends Component {
-   constructor(props) {
-     super(props);
+const INITIAL_STATE = {
+    email: '',
+    password: '',
+    error: null,
+    signUp: false,
+};
 
-     this.state = {
-       name: '',
-       email: '',
-       redirect: false
-     };
-   }
 
-   setRedirect = () => {
-     this.setState({
-       redirect: true
-     });
-   }
+const style = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+});
 
-   renderRedirect = () => {
-     if (this.state.redirect) {
-       return (
-         <Redirect to='/welcome' />
-       );
-     }
-   }
+class Login extends React.Component {
+    constructor(props) {
+        super(props);
 
-   handleSubmit = event => {
-       event.preventDefault();
-       this.props.mutate({
-           variables: {
-               name: this.state.name,
-               email: this.state.email
-           }
-       });
-   }
+        this.state = { ...INITIAL_STATE }
+    }
 
-   handleChange = event => {
-     this.setState({
-       [event.target.id]: event.target.value
-     });
-   }
+    handleChange = (name, value) => {
+        this.setState({ [name]: value });
+    }
 
-   render() {
-     return (
-       <div className="Login">
-         <form onSubmit={this.handleSubmit}>
-           <h2 className="contentHeading">Login to your account</h2>
-           {/*
-           <FormGroup
-             className="formField"
-             controlId="name"
-             bsSize="large">
-             <FormControl
-               className="formInputControl"
-               placeholder="Name"
-               value={this.state.name}
-               onChange={this.handleChange}
-               type="name"
-             />
-           </FormGroup>
-           */}
-           <FormGroup
-             className="formField"
-             controlId="email"
-             bsSize="large">
-             <FormControl
-               autoFocus
-               className="formInputControl"
-               placeholder="Email"
-               type="email"
-               value={this.state.email}
-               onChange={this.handleChange}
-             />
-           </FormGroup>
-           <FormGroup
-             className="formField"
-             controlId="password"
-             bsSize="large">
-             <FormControl
-               autoFocus
-               className="formInputControl"
-               placeholder="Password"
-               type="password"
-               value={this.state.email}
-               onChange={this.handleChange}
-             />
-           </FormGroup>
-           {this.renderRedirect()}
-           <Button
-             className="formButton"
-             bsStyle="primary"
-             bsSize="large"
-             type="submit"
-             onClick={this.setRedirect}>Submit</Button>
+    handleLogin = (event) => {
+        const {
+            email,
+            password,
+        } = this.state;
 
-           <h4 className="contentText">Don't have an account? <a href="/signup">Register now</a></h4>
-         </form>
-       </div>
-     );
-   }
- }
+        auth.doSignInWithEmailAndPassword(email, password)
+            .then((c) => {
+                console.log(c);
+                this.setState({ ...INITIAL_STATE });
+            })
+            .catch(error => {
+                this.setState(this.handleChange('error', error));
+            });
 
-export default graphql(addUsersQuery)(loginPage);
+        event.preventDefault();
+    }
+
+    handleSignUp = () => {
+        this.setState({ signUp: !this.state.signUp });
+    }
+
+    render() {
+        const {
+            email,
+            password,
+            signUp,
+        } = this.state;
+        const {
+          classes
+      } = this.props;
+        return (
+            <div style={styles.loginContainer}>
+                <div style={styles.loginLeftPanel}>
+                  <img></img>
+                </div>
+                <div style={styles.seperator} />
+                <div style={styles.loginRightPanel}>
+                    {
+                        signUp ?
+                            <SignUp handleSignUp={this.handleSignUp} />
+                            :
+                            <form onSubmit={this.handleLogin} style={styles.loginForm}>
+                                <div>
+                                <Typography component="h2" variant="h2" gutterBottom>
+                                  Login
+                                </Typography>
+                                </div>
+                                <TextField
+                                  id="email"
+                                  label="Email"
+                                  value={email}
+                                  onChange={event => this.handleChange('email', event.target.value)}
+                                  type="email"
+                                  InputLabelProps={{
+                                    shrink: true,
+                                  }}
+                                  fullWidth
+                                  margin="normal"
+                                />
+                                <TextField
+                                  id="password"
+                                  label="Password"
+                                  value={password}
+                                  onChange={event => this.handleChange('password', event.target.value)}
+                                  type="password"
+                                  InputLabelProps={{
+                                    shrink: true,
+                                  }}
+                                  fullWidth
+                                  margin="normal"
+                                />
+                                <div style={styles.loginRow}>
+                                  <Button className={classes.button}>Forgot Password</Button>
+                                  <Button variant="contained" type="submit" className={classes.button}>
+                                    Sign In
+                                  </Button>
+                                </div>
+                                <Button fullWidth variant="contained" type="reset" className={classes.button} onClick={this.handleSignUp}>
+                                  Sign Up
+                                </Button>
+                            </form>
+                    }
+
+                </div>
+            </div>
+        )
+    }
+}
+
+export default withStyles(style)(Login);
+
+
+const styles = {
+    loginContainer: {
+        position: "absolute",
+        top: 0, right: 0, left: 0, bottom: 0,
+        background: "#FFF",
+        display: 'flex',
+        alignItems: "center",
+    },
+    loginLeftPanel: {
+        width: 'calc(50% - 1px)',
+        position: 'relative',
+        boxSizing: "border-box",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    logo: {
+        border: "1px solid grey",
+        height: '200px',
+        width: '200px',
+    },
+    seperator: {
+        backgroundColor: "#000",
+        height: '50%',
+        width: '2px',
+    },
+    loginRightPanel: {
+        width: 'calc(50% - 1px)',
+        position: 'relative',
+        boxSizing: "border-box",
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    loginForm: {
+        width: '300px',
+    },
+    title: {
+      fontSize: '3em',
+      marginBottom: '0.25em',
+      fontWeight: '200',
+    },
+    input: {
+        width: '100%',
+        height: '25px',
+        marginBottom: '20px',
+    },
+    loginRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '20px',
+        marginTop: '20px'
+    },
+    forgot: {
+        fontSize: '0.7rem',
+        cursor: 'pointer',
+        display: 'inline-block',
+    },
+    submit: {
+        padding: "7px 12px",
+        border: '1px solid grey',
+        boxShadow: '2px 5px 5px 0px rgba(92,92,92,1)',
+        cursor: 'pointer',
+        display: 'inline-block',
+        fontSize: '0.9em',
+    },
+    signUp: {
+        padding: "7px 12px",
+        border: '1px solid grey',
+        boxShadow: '2px 5px 5px 0px rgba(92,92,92,1)',
+        cursor: 'pointer',
+        width: '100%',
+        textAlign: 'center',
+        fontSize: '0.9em',
+    }
+}
