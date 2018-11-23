@@ -4,6 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid'
+
 import { auth } from '../Services';
 
 const INITIAL_STATE = {
@@ -63,9 +65,16 @@ class LoginPage extends Component {
           classes
       } = this.props;
         return (
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
             <div style={styles.loginContainer}>
                 <div style={styles.loginLeftPanel}>
                   <img></img>
+                  <h1>INSERT LOGO HERE</h1>
                 </div>
                 <div style={styles.seperator} />
                 <div style={styles.loginRightPanel}>
@@ -74,20 +83,17 @@ class LoginPage extends Component {
                             <SignUp handleSignUp={this.handleSignUp} />
                             :
                             <form onSubmit={this.handleLogin} style={styles.loginForm}>
-                                <div>
-                                <Typography component="h2" variant="h2" gutterBottom>
-                                  Login
-                                </Typography>
-                                </div>
+                            <div>
+                            <h1 style={styles.title}>
+                              Login
+                            </h1>
+                            </div>
                                 <TextField
                                   id="email"
                                   label="Email"
                                   value={email}
                                   onChange={event => this.handleChange('email', event.target.value)}
                                   type="email"
-                                  InputLabelProps={{
-                                    shrink: true,
-                                  }}
                                   fullWidth
                                   margin="normal"
                                 />
@@ -97,9 +103,7 @@ class LoginPage extends Component {
                                   value={password}
                                   onChange={event => this.handleChange('password', event.target.value)}
                                   type="password"
-                                  InputLabelProps={{
-                                    shrink: true,
-                                  }}
+
                                   fullWidth
                                   margin="normal"
                                 />
@@ -109,14 +113,13 @@ class LoginPage extends Component {
                                     Sign In
                                   </Button>
                                 </div>
-                                <Button fullWidth variant="contained" type="reset" className={classes.button} onClick={this.handleSignUp}>
-                                  Sign Up
-                                </Button>
+                                <h5 style={styles.loginText}>Not a member? <a href="/signup">Register here</a></h5>
                             </form>
                     }
 
                 </div>
             </div>
+          </Grid>
         )
     }
 }
@@ -126,7 +129,7 @@ export default withStyles(style)(LoginPage);
 
 const styles = {
     loginContainer: {
-        position: "absolute",
+        position: "relative",
         top: 0, right: 0, left: 0, bottom: 0,
         background: "#FFF",
         display: 'flex',
@@ -164,6 +167,7 @@ const styles = {
       fontSize: '3em',
       marginBottom: '0.25em',
       fontWeight: '200',
+      color: '#00b3b3'
     },
     input: {
         width: '100%',
@@ -198,5 +202,9 @@ const styles = {
         width: '100%',
         textAlign: 'center',
         fontSize: '0.9em',
+    },
+    loginText: {
+      color: '#696969',
+
     }
 }
