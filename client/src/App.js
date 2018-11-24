@@ -33,17 +33,23 @@ function PublicRoute ({component: Component, authed, ...rest}) {
   )
 }
 
+// Global authentication id variable for the user session. 
+let ID = null; 
+
 export default class App extends Component {
   state = {
     authed: false,
     loading: true,
+    firebaseID: null
   }
+
   componentDidMount () {
     this.removeListener = firebaseAuth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
           authed: true,
           loading: false,
+          firebaseID: user.uid
         })
       } else {
         this.setState({
@@ -57,6 +63,7 @@ export default class App extends Component {
     this.removeListener()
   }
   render() {
+    ID = this.state.firebaseID; 
     return this.state.loading === true ? <h1>Loading</h1> : (
       <BrowserRouter>
         <div>
@@ -72,10 +79,9 @@ export default class App extends Component {
 
             <Navbar.Collapse>
             <Nav pullRight>
-              
+              <div>
                   {this.state.authed
-                  ? <div>
-                  <Link to="/profile" className="navbar-brand">Profile</Link>
+                  ? <div><Link to="/profile" className="navbar-brand">Profile</Link>
                       <button
                         style={{border: 'none', background: 'transparent'}}
                         onClick={() => {
@@ -89,7 +95,7 @@ export default class App extends Component {
                       <Link to="/register" className="navbar-brand">Register</Link>
                     </div>
                     }
-                
+                </div>
             </Nav>
             </Navbar.Collapse>
           </Navbar>
@@ -98,7 +104,7 @@ export default class App extends Component {
           <div className="container">
             <div className="row">
               <Switch>
-                <Route path='/' exact component={Home} />
+                <Route path='/' exact authID={this.state.firebaseID} component={HomeFunc} />
                 <PublicRoute authed={this.state.authed} path='/login' component={Login} />
                 <PublicRoute authed={this.state.authed} path='/register' component={Register} />
                 <PrivateRoute authed={this.state.authed} path='/profile' component={ProfilePage} />
@@ -109,10 +115,13 @@ export default class App extends Component {
             
           {/* Footer Component */}
           <Footer/>
-
+                    
         </div>
       </BrowserRouter>
     );
   }
 }
 
+function HomeFunc() {
+  return <Home authID={ID} />
+}

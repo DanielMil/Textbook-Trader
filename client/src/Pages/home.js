@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import {
-  Row, Col, Grid, FormGroup, FormControl, ControlLabel, Table
+  Row, Col, Grid, Table
  } from "react-bootstrap";
 import "../Styles/Home.css";
 import { CardImg } from 'reactstrap';
 import  IntegrationAutosuggest from '../Components/autoSuggest';
+import Welcome from '../Components/welcome'
 
 const getAllTextbooks = gql` 
   {
@@ -42,21 +43,10 @@ class HomePage extends Component {
         <Grid className="Grid-Top">
           <Row className="show-grid">
             <Col xs={12} md={8}>
-              <h3>Welcome to Textbook Trader</h3>
+            <Welcome authID={this.props.authID}/>
             </Col>
             <Col xs={6} md={4}>
             <IntegrationAutosuggest/>
-            {/* <form>
-              <FormGroup>
-                <ControlLabel>Search a Course Code</ControlLabel>
-                <FormControl
-                  type="text"
-                  value={this.state.value}
-                  placeholder="CIS*2750"
-                  onChange={this.handleChange}
-                />
-              </FormGroup>
-            </form> */}
             </Col>
           </Row>
         </Grid>
