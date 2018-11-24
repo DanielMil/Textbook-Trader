@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import deburr from 'lodash/deburr';
@@ -16,6 +15,7 @@ function renderInputComponent(inputProps) {
 
   return (
     <TextField
+      className={classes.textField}
       fullWidth
       InputProps={{
         inputRef: node => {
@@ -23,7 +23,7 @@ function renderInputComponent(inputProps) {
           inputRef(node);
         },
         classes: {
-          input: classes.input,
+          input: classes.resize,
         },
       }}
       {...other}
@@ -40,11 +40,11 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
       <div>
         {parts.map((part, index) => {
           return part.highlight ? (
-            <span key={String(index)} style={{ fontWeight: 500 }}>
+            <span key={String(index)} style={{ fontWeight: 500, fontSize:13 }}>
               {part.text}
             </span>
           ) : (
-            <strong key={String(index)} style={{ fontWeight: 300 }}>
+            <strong key={String(index)} style={{ fontWeight: 300, fontSize:13 }}>
               {part.text}
             </strong>
           );
@@ -80,11 +80,11 @@ function getSuggestionValue(suggestion) {
 const styles = theme => ({
   root: {
     height: 20,
-    flexGrow: 1,
+    flexGrow: 1
   },
   container: {
     position: 'relative',
-    paddingTop: 30
+    marginTop: 30
   },
   suggestionsContainerOpen: {
     position: 'absolute',
@@ -104,6 +104,13 @@ const styles = theme => ({
   divider: {
     height: theme.spacing.unit * 2,
   },
+  textField: {
+    //adjust input field width here
+  },
+  
+  resize:{
+    fontSize:17
+  }
 });
 
 class IntegrationAutosuggest extends React.Component {
