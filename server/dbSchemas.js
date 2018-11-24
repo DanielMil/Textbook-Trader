@@ -4,7 +4,8 @@ let SchemasTemplates = {
         name :  String,
         email : String,
         textbookIds : [String],
-        password: String
+        password: String,
+        authId : String
     },
 
     textbookSchema : {

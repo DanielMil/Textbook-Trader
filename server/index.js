@@ -27,6 +27,7 @@ const Textbook = mongoose.model("Textbook", textbookSchema);
 
 const resolvers = {
   Query: {
+    getUserByAuthId: (_,{authIdToFind}) => User.findOne({authId: authIdToFind}),
     getTextbooks: () => Textbook.find(),
     getUsers: () => User.find(),
     getUserTextbooks: (_,{id}) => Textbook.find({id: id}),
@@ -53,9 +54,8 @@ const resolvers = {
     }
   },
   Mutation: {
-    createUser: async (_, { name, email, password } ) => {
-        let hashedPass = await bcrypt.hash(password, 12);
-        const newUser = new User({name, email, password: hashedPass});
+    createUser: async (_, { fname, lname, email, authId } ) => {
+        const newUser = new User({fname, lname, email, authId});
         await newUser.save();
         return newUser;
     },

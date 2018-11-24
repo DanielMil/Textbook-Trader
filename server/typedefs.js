@@ -1,5 +1,6 @@
 const typeDefs = `
   type Query {
+    getUserByAuthId(authIdToFind: String!): User
     getUsers: [User]!
     getTextbooks: [Textbook]!
     getUserTextbooks(userID: String!): [Textbook]
@@ -8,10 +9,11 @@ const typeDefs = `
   }
   type User {
     id: ID!
-    name: String!  
+    fname: String!
+    lname: String!  
     email: String!
     textbookIds: [String]
-    password: String!
+    authId: String!
   }
   type Textbook {
     id: ID!
@@ -19,7 +21,7 @@ const typeDefs = `
     userID: String
   }
   type Mutation {
-    createUser(name: String!, email: String!, password: String!): User
+    createUser(fname: String!, lname: String!, email: String!, authId: String!): User
     createTextbook(courseCode: String!, userID: String): Textbook
     removeUser(id: ID!): Boolean
     removeTextbook(id: ID!): Boolean
