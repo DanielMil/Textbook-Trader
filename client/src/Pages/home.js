@@ -6,6 +6,7 @@ import {
  } from "react-bootstrap";
 import "../Styles/Home.css";
 import { CardImg } from 'reactstrap';
+import  IntegrationAutosuggest from '../Components/autoSuggest';
 
 const getAllTextbooks = gql` 
   {
@@ -44,7 +45,8 @@ class HomePage extends Component {
               <h3>Welcome to Textbook Trader</h3>
             </Col>
             <Col xs={6} md={4}>
-            <form>
+            <IntegrationAutosuggest/>
+            {/* <form>
               <FormGroup>
                 <ControlLabel>Search a Course Code</ControlLabel>
                 <FormControl
@@ -54,7 +56,7 @@ class HomePage extends Component {
                   onChange={this.handleChange}
                 />
               </FormGroup>
-            </form>
+            </form> */}
             </Col>
           </Row>
         </Grid>
