@@ -25,3 +25,11 @@ export function saveUser (user) {
     })
     .then(() => user)
 }
+
+export function getCurrentUid() {
+  if (firebaseAuth().currentUser) {
+    return firebaseAuth().currentUser.uid;
+  } else {
+    return null;
+  }
+}
