@@ -7,9 +7,12 @@ import ProfilePage from './Components/protected/profile';
 import Login from './Pages/loginPage'
 import Register from './Pages/signupPage'
 import Home from './Pages/home'
-import {
-  Navbar, Nav,
- } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faSearch); //used for the search symbol
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (

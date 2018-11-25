@@ -9,11 +9,15 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
 import suggestions from '../courses';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Col, Grid} from "react-bootstrap";
 
 function renderInputComponent(inputProps) {
   const { classes, inputRef = () => {}, ref, ...other } = inputProps;
 
   return (
+    <div>
+    <FontAwesomeIcon className={classes.textField} icon="search"/>
     <TextField
       className={classes.textField}
       fullWidth
@@ -28,6 +32,7 @@ function renderInputComponent(inputProps) {
       }}
       {...other}
     />
+    </div>
   );
 }
 

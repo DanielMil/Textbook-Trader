@@ -1,10 +1,10 @@
 
 let SchemasTemplates = {
     userSchema : {
-        name :  String,
+        fname :  String,
+        lname :  String,
         email : String,
         textbookIds : [String],
-        password: String,
         authId : String
     },
 
