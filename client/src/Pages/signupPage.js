@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { auth } from '../helpers/auth';
-import { create } from 'domain';
+import { auth, getCurrentUid } from '../helpers/auth';
 import { graphql } from "react-apollo";
-import gql from "graphql-tag";
+import { gql } from 'apollo-boost';
 
-function setErrorMsg(error) {
+function setErrorMsg (error) {
   return {
     registerError: error.message
   }
 }
 
-const createUser = gql`
+const createUserMutation = gql`
     mutation($fname: String!, $lname: String!, $email: String!, $authId: String!){
         createUser(fname: $fname, lname: $lname, email: $email, authId: $authId) {
             fname
@@ -20,46 +19,73 @@ const createUser = gql`
 
 class Register extends Component {
 
-  state = { registerError: null }
+  constructor(props) {
+    super(props);
+    this.state = { 
+      registerError: null,
+      fname: '',
+      lname: '',
+      email: '',
+      password: '', 
+      cpassword: ''
+    };
+  }
+
+  async insertToDatabase(user) {
+    // const firebaseID = getCurrentUid();
+    // this.props.mutate({
+    //   variables: {
+    //     fname: this.state.fname, 
+    //     lname: this.state.lname, 
+    //     email: this.state.email, 
+    //     authId: firebaseID
+    //   }
+    // });
+    await console.log(getCurrentUid);
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
-    //mutation call here 
-    createUser({
-      variables: {
-        fname:this.firstName.value, 
-        lname:this.lastName.value, 
-        email: this.email.value , 
-        authId: 'uidTest'
-      }
-    });
-    // auth(this.email.value, this.pw.value)
-    //   .catch(e => this.setState(setErrorMsg(e)));
   
+    if (this.state.password !== this.state.cpassword) {
+      this.setState({registerError: "Passwords do not match!"});
+      return null; 
+    }
+
+    auth(this.state.email, this.state.password)
+      .then((this.insertToDatabase()))
+      .catch(e => {
+        this.setState(setErrorMsg(e))
+        return null; 
+      }
+    );
   }
 
   render () {
 
-    console.log(this);
-
     return (
       <div className="col-sm-6 col-sm-offset-3">
         <h1>Register</h1>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit.bind(this)} >
           <div className="form-group">
             <label>First Name</label>
-            <input className="form-control" ref={(firstName) => this.firstName = firstName} placeholder="Name"/>
+            <input className="form-control" onChange={(e)=>this.setState({fname: e.target.value})} placeholder="Name"/>
           </div>
           <div className="form-group">
             <label>Last Name</label>
-            <input className="form-control" ref={(lastName) => this.lastName = lastName} placeholder="Last Name"/>
+            <input className="form-control" onChange={(e)=>this.setState({lname: e.target.value})} placeholder="Last Name"/>
           </div>
           <div className="form-group">
             <label>Email</label>
-            <input className="form-control" ref={(email) => this.email = email} placeholder="Email"/>
+            <input className="form-control" onChange={(e)=>this.setState({email: e.target.value})} placeholder="Email"/>
           </div>
           <div className="form-group">
             <label>Password</label>
-            <input type="password" className="form-control" placeholder="Password" ref={(pw) => this.pw = pw} />
+            <input type="password" className="form-control" placeholder="Password" onChange={(e)=>this.setState({password: e.target.value})} />
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input type="password" className="form-control" placeholder="Confirm Password" onChange={(e)=>this.setState({cpassword: e.target.value})} />
           </div>
           {
             this.state.registerError &&
@@ -76,4 +102,4 @@ class Register extends Component {
   }
 }
 
-export default graphql(createUser)(Register);
+export default graphql(createUserMutation)(Register);

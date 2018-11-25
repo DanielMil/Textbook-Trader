@@ -10,7 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
 import suggestions from '../courses';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Col, Grid} from "react-bootstrap";
 
 function renderInputComponent(inputProps) {
   const { classes, inputRef = () => {}, ref, ...other } = inputProps;

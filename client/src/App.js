@@ -36,14 +36,10 @@ function PublicRoute ({component: Component, authed, ...rest}) {
   )
 }
 
-// Global authentication id variable for the user session. 
-let ID = null; 
-
 export default class App extends Component {
   state = {
     authed: false,
-    loading: true,
-    firebaseID: null
+    loading: true
   }
 
   componentDidMount () {
@@ -65,8 +61,7 @@ export default class App extends Component {
   componentWillUnmount () {
     this.removeListener()
   }
-  render() {
-    ID = this.state.firebaseID; 
+  render() { 
     return this.state.loading === true ? <h1>Loading</h1> : (
       <BrowserRouter>
         <div>
@@ -107,7 +102,7 @@ export default class App extends Component {
           <div className="container">
             <div className="row">
               <Switch>
-                <Route path='/' exact authID={this.state.firebaseID} component={HomeFunc} />
+                <Route path='/' exact authID={this.state.firebaseID} component={Home} />
                 <PublicRoute authed={this.state.authed} path='/login' component={Login} />
                 <PublicRoute authed={this.state.authed} path='/register' component={Register} />
                 <PrivateRoute authed={this.state.authed} path='/profile' component={ProfilePage} />
@@ -123,8 +118,4 @@ export default class App extends Component {
       </BrowserRouter>
     );
   }
-}
-
-function HomeFunc() {
-  return <Home authID={ID} />
 }
