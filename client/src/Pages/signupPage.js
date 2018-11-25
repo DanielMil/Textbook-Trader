@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { auth, getCurrentUid } from '../helpers/auth';
 import { graphql } from "react-apollo";
 import { gql } from 'apollo-boost';
+import { ref, firebaseAuth } from '../config/constants'
 
 function setErrorMsg (error) {
   return {
@@ -31,17 +31,25 @@ class Register extends Component {
     };
   }
 
-  async insertToDatabase(user) {
-    // const firebaseID = getCurrentUid();
-    // this.props.mutate({
-    //   variables: {
-    //     fname: this.state.fname, 
-    //     lname: this.state.lname, 
-    //     email: this.state.email, 
-    //     authId: firebaseID
-    //   }
-    // });
-    await console.log(getCurrentUid);
+  insertToDatabase = (firebaseID) => {
+    this.props.mutate({
+      variables: {
+        fname: this.state.fname, 
+        lname: this.state.lname, 
+        email: this.state.email, 
+        authId: firebaseID
+      }
+    });
+  }
+
+  saveUser = (user) => {
+    this.insertToDatabase(user.user.uid);
+    return ref.child(`users/${user.uid}/info`)
+      .set({
+        email: user.email,
+        uid: user.uid
+      })
+      .then(() => console.log(user))
   }
 
   handleSubmit = (e) => {
@@ -52,8 +60,8 @@ class Register extends Component {
       return null; 
     }
 
-    auth(this.state.email, this.state.password)
-      .then((this.insertToDatabase()))
+    firebaseAuth().createUserWithEmailAndPassword(this.state.email ,this.state.password)
+      .then(this.saveUser)
       .catch(e => {
         this.setState(setErrorMsg(e))
         return null; 
