@@ -13,8 +13,11 @@ import Welcome from '../Components/welcome'
 const getAllTextbooks = gql` 
   {
     getTextbooks {
-      id
       courseCode
+      textbook
+      price
+      imgURL
+      id
     }
   }
 `;
@@ -68,8 +71,8 @@ class HomePage extends Component {
               <tr key={`${textbook.id}--course-code`}>
                 <td><CardImg top width="50%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" /></td>
                 <td>{textbook.courseCode}</td> 
-                <td>Price Goes Here</td>
-                <td>ID: {textbook.id}</td>
+                <td>{textbook.price}</td>
+                <td>{textbook.textbook}</td>
               </tr>
               
             ))}

@@ -10,7 +10,10 @@ let SchemasTemplates = {
 
     textbookSchema : {
         courseCode : String,
-        userID : String
+        textbook: String,
+        price: String,
+        imgURL: String,
+        userId : String
     }
 };
 module.exports = SchemasTemplates;

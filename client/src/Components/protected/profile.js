@@ -5,12 +5,15 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { Card, CardImg, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
 import { Row, Col, Grid, Button} from "react-bootstrap";
 import "../../Styles/profile.css";
+import Post from '../post';
 
 const getAllTextbooks = gql` 
   {
     getTextbooks {
-      id
       courseCode
+      textbook
+      price
+      id
     }
   }
 `;
@@ -36,8 +39,8 @@ class profile extends Component {
                                         <CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />
                                         <CardBody>
                                             <CardTitle key={`textbook-${textbook.id}`}>Course: {textbook.courseCode}</CardTitle>
-                                            <CardSubtitle>Textbook:</CardSubtitle>
-                                            <CardSubtitle>Price:</CardSubtitle>
+                                            <CardSubtitle>Textbook:{textbook.textbook}</CardSubtitle>
+                                            <CardSubtitle>Price: {textbook.price}</CardSubtitle>
                                             <Button className="btns" bsStyle="primary">Edit</Button>
                                             <Button className="btns" bsStyle="danger">Delete</Button>
                                         </CardBody>
@@ -50,7 +53,7 @@ class profile extends Component {
                     </Grid>
                 </Tab>
                 <Tab eventKey={2} title="Upload">
-                    Tab 2 content
+                    <Post/>
                 </Tab>
                 <Tab eventKey={3} title="Account Settings">
                     Tab 3 content

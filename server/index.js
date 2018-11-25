@@ -59,10 +59,12 @@ const resolvers = {
         await newUser.save();
         return newUser;
     },
-    createTextbook: async (_, { courseCode, userID } ) => {
-        const newTextbook =  new Textbook({courseCode, userID});
+    createTextbook: async (_, { courseCode, textbook, price, imgURL, userId } ) => {
+        let user = await User.findOne({authId: userId}); // Find user by firebase authID
+        userId = user.id; //sets userID to mongo userID not firebaseID
+        const newTextbook =  new Textbook({courseCode, textbook, price, imgURL, userId});
         await newTextbook.save();
-        await User.findByIdAndUpdate(userID, {$push : {textbookIds: newTextbook.id}});
+        await User.findByIdAndUpdate(userId, {$push : {textbookIds: newTextbook.id}});
         return newTextbook;
     },
     removeUser: async (_, { id } ) => {
@@ -71,7 +73,7 @@ const resolvers = {
     },
     removeTextbook: async (_, { id } ) => {
       let tb = await Textbook.findById(id);
-      let userID = tb.userID;
+      let userID = tb.userId;
       //remove texbookID from user array
       await User.findByIdAndUpdate(userID, {$pull : {textbookIds: id}});
       //delete textbook from DB

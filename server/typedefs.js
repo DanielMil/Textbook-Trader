@@ -3,7 +3,7 @@ const typeDefs = `
     getUserByAuthId(authIdToFind: String!): User
     getUsers: [User]!
     getTextbooks: [Textbook]!
-    getUserTextbooks(userID: String!): [Textbook]
+    getUserTextbooks(userId: String!): [Textbook]
     getUser(id: String!): User
     login(name:String!, password:String!): Boolean!
   }
@@ -17,12 +17,15 @@ const typeDefs = `
   }
   type Textbook {
     id: ID!
-    courseCode: String!  
-    userID: String
+    courseCode: String!
+    textbook: String!
+    price: String!
+    imgURL: String
+    userId: String!
   }
   type Mutation {
     createUser(fname: String!, lname: String!, email: String!, authId: String!): User
-    createTextbook(courseCode: String!, userID: String): Textbook
+    createTextbook(courseCode: String!, textbook: String!, price: String!, imgURL: String , userId: String!): Textbook
     removeUser(id: ID!): Boolean
     removeTextbook(id: ID!): Boolean
   }
