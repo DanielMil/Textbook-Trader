@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
-import { login, resetPassword } from '../helpers/auth'
+import { login, resetPassword } from '../helpers/auth';
+import Icon from 'react-icons-kit';
+import {mail} from 'react-icons-kit/entypo/mail';
+import {lock} from 'react-icons-kit/fa/lock';
+import "../Styles/Login.css";
 
 function setErrorMsg(error) {
   return {
@@ -23,27 +27,39 @@ export default class Login extends Component {
   }
   render () {
     return (
-      <div className="col-sm-6 col-sm-offset-3">
-        <h1> Login </h1>
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label>Email</label>
-            <input className="form-control" ref={(email) => this.email = email} placeholder="Email"/>
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input type="password" className="form-control" placeholder="Password" ref={(pw) => this.pw = pw} />
-          </div>
-          {
-            this.state.loginMessage &&
-            <div className="alert alert-danger" role="alert">
-              <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-              <span className="sr-only">Error:</span>
-              {/* &nbsp;{this.state.loginMessage} <a href="#" onClick={this.resetPassword} className="alert-link">Forgot Password?</a> */}
+      <div className="col-sm-10 col-sm-offset-1 content align-middle">
+        <row>
+          <div className="col-lg-6">
+          <h1 className="contentHeading">Sign in</h1>
+          <form onSubmit={this.handleSubmit}>
+            <div className="form-group">
+              <label className="inputLabel"><Icon icon={mail} className="icons"/></label>
+              <input className="form-control" ref={(email) => this.email = email} placeholder="Email"/>
             </div>
-          }
-          <button type="submit" className="btn btn-primary">Login</button>
-        </form>
+            <div className="form-group">
+              <label className="inputLabel"><Icon icon={lock} className="icons"/></label>
+              <input type="password" className="form-control" placeholder="Password" ref={(pw) => this.pw = pw} />
+            </div>
+            {
+              this.state.loginMessage &&
+              <div className="alert alert-danger" role="alert">
+                <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span className="sr-only">Error:</span>
+                {/* &nbsp;{this.state.loginMessage} <a href="#" onClick={this.resetPassword} className="alert-link">Forgot Password?</a> */}
+              </div>
+            }
+            <button type="submit" className="btn formButton">Login</button>
+          </form>
+          <div className="col-xs-8 col-xs-offset-2">
+          <h4 className="contentText">Not a member? <a href="/register">Sign up now</a></h4>
+          </div>
+          </div>
+
+          <div className="col-lg-6">
+            <h1>where's the fkin blo(go)w</h1>
+          </div>
+
+        </row>
       </div>
     )
   }

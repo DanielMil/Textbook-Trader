@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import { graphql } from "react-apollo";
 import { gql } from 'apollo-boost';
 import { ref, firebaseAuth } from '../config/constants'
+import Icon from 'react-icons-kit';
+import {userCircle} from 'react-icons-kit/fa/userCircle';
+import {userCircleO} from 'react-icons-kit/fa/userCircleO';
+import {mail} from 'react-icons-kit/entypo/mail';
+import {lock} from 'react-icons-kit/fa/lock';
+import "../Styles/Signup.css";
 
 function setErrorMsg (error) {
   return {
@@ -21,12 +27,12 @@ class Register extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       registerError: null,
       fname: '',
       lname: '',
       email: '',
-      password: '', 
+      password: '',
       cpassword: ''
     };
   }
@@ -34,9 +40,9 @@ class Register extends Component {
   insertToDatabase = (firebaseID) => {
     this.props.mutate({
       variables: {
-        fname: this.state.fname, 
-        lname: this.state.lname, 
-        email: this.state.email, 
+        fname: this.state.fname,
+        lname: this.state.lname,
+        email: this.state.email,
         authId: firebaseID
       }
     });
@@ -54,17 +60,17 @@ class Register extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-  
+
     if (this.state.password !== this.state.cpassword) {
       this.setState({registerError: "Passwords do not match!"});
-      return null; 
+      return null;
     }
 
     firebaseAuth().createUserWithEmailAndPassword(this.state.email ,this.state.password)
       .then(this.saveUser)
       .catch(e => {
         this.setState(setErrorMsg(e))
-        return null; 
+        return null;
       }
     );
   }
@@ -72,29 +78,44 @@ class Register extends Component {
   render () {
 
     return (
-      <div className="col-sm-6 col-sm-offset-3">
-        <h1>Register</h1>
+      <div className="col-sm-10 col-sm-offset-1 content align-middle">
+      <row>
+      <div className="col-lg-6">
+      <h1>where's the fkin blo(go)w</h1>
+      </div>
+      </row>
+      <div className="col-lg-6">
+
+        <h1 className="contentHeading">Get Started</h1>
         <form onSubmit={this.handleSubmit.bind(this)} >
-          <div className="form-group">
-            <label>First Name</label>
-            <input className="form-control" onChange={(e)=>this.setState({fname: e.target.value})} placeholder="Name"/>
+        <row>
+          <div className="form-group col-xs-6">
+            <label className="inputLabel"><Icon icon={userCircleO} className="icons"/></label>
+            <input className="form-control" onChange={(e)=>this.setState({fname: e.target.value})} placeholder="First Name"/>
           </div>
-          <div className="form-group">
-            <label>Last Name</label>
+          <div className="form-group col-xs-6">
+            <label className="inputLabel"><Icon icon={userCircle} className="icons"/></label>
             <input className="form-control" onChange={(e)=>this.setState({lname: e.target.value})} placeholder="Last Name"/>
           </div>
-          <div className="form-group">
-            <label>Email</label>
+          </row>
+          <row>
+          <div className="form-group col-xs-12">
+            <label className="inputLabel"><Icon icon={mail} className="icons"/></label>
             <input className="form-control" onChange={(e)=>this.setState({email: e.target.value})} placeholder="Email"/>
           </div>
-          <div className="form-group">
-            <label>Password</label>
+          </row>
+          <row>
+          <div className="form-group col-xs-12">
+            <label className="inputLabel"><Icon icon={lock} className="icons"/></label>
             <input type="password" className="form-control" placeholder="Password" onChange={(e)=>this.setState({password: e.target.value})} />
           </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input type="password" className="form-control" placeholder="Confirm Password" onChange={(e)=>this.setState({cpassword: e.target.value})} />
+          </row>
+          <row>
+          <div className="form-group col-xs-12">
+            <label className="inputLabel"><Icon icon={lock} className="icons"/></label>
+            <input type="password" className="form-control formControl" placeholder="Confirm Password" onChange={(e)=>this.setState({cpassword: e.target.value})} />
           </div>
+          </row>
           {
             this.state.registerError &&
             <div className="alert alert-danger" role="alert">
@@ -103,8 +124,14 @@ class Register extends Component {
               &nbsp;{this.state.registerError}
             </div>
           }
-          <button type="submit" className="btn btn-primary">Register</button>
+          <row>
+          <div className="col-xs-12 container">
+          <button type="submit" className="btn formButton">Create Account</button>
+          </div>
+          </row>
         </form>
+        </div>
+
       </div>
     )
   }
