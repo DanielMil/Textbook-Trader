@@ -8,6 +8,8 @@ import {userCircleO} from 'react-icons-kit/fa/userCircleO';
 import {mail} from 'react-icons-kit/entypo/mail';
 import {lock} from 'react-icons-kit/fa/lock';
 import "../Styles/Signup.css";
+import { CardImg } from 'reactstrap';
+
 
 function setErrorMsg (error) {
   return {
@@ -78,12 +80,14 @@ class Register extends Component {
   render () {
 
     return (
-      <div className="col-sm-10 col-sm-offset-1 content align-middle">
-      <row>
-      <div className="col-lg-6">
-      <h1>where's the fkin blo(go)w</h1>
-      </div>
-      </row>
+      <div className="col-sm-10 col-sm-offset-1 content align-middle main-page">
+        <row>
+        <div className="col-lg-6">
+          <h1>Welcome to Radl</h1>
+          <h3>Info about what the platform is goes here...</h3>
+          <CardImg top width="75%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap"/>
+        </div>
+        </row>
       <div className="col-lg-6">
 
         <h1 className="contentHeading">Get Started</h1>
@@ -113,7 +117,7 @@ class Register extends Component {
           <row>
           <div className="form-group col-xs-12">
             <label className="inputLabel"><Icon icon={lock} className="icons"/></label>
-            <input type="password" className="form-control formControl" placeholder="Confirm Password" onChange={(e)=>this.setState({cpassword: e.target.value})} />
+            <input type="password" className="form-control" placeholder="Confirm Password" onChange={(e)=>this.setState({cpassword: e.target.value})} />
           </div>
           </row>
           {

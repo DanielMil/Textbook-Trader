@@ -24,7 +24,7 @@ function FooterPage() {
         <div>
             <div style={phantom} />
             <div style={style}>
-                {new Date().getFullYear()} &copy; Textbook Trader
+                {new Date().getFullYear()} &copy; Radl
             </div>
         </div>
     )

@@ -1,6 +1,11 @@
+/* .Main-Panel {
+  margin-top: 0px; 
+} */
+.main-page {
+  margin-top: 25px !important; 
+}
+
 @media all and (min-width: 480px) {
-
-
 
    .content {
      margin-top: 5%;
