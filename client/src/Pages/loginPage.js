@@ -4,6 +4,7 @@ import Icon from 'react-icons-kit';
 import {mail} from 'react-icons-kit/entypo/mail';
 import {lock} from 'react-icons-kit/fa/lock';
 import "../Styles/Login.css";
+import { CardImg } from 'reactstrap';
 
 function setErrorMsg(error) {
   return {
