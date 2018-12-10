@@ -11,8 +11,8 @@ function setErrorMsg (error) {
 }
 
 const createTextbook = gql`
-    mutation($courseCode: String!, $textbook: String!, $price: String!, $imgURL: String , $userId: String!){
-        createTextbook(courseCode: $courseCode, textbook: $textbook, price: $price, imgURL: $imgURL , userId: $userId) {
+    mutation($courseCode: String!, $textbook: String!, $price: String!, $imgURL: String , $authId: String!){
+        createTextbook(courseCode: $courseCode, textbook: $textbook, price: $price, imgURL: $imgURL , authId: $authId) {
             id
         }
     }
@@ -29,7 +29,7 @@ class Post extends React.Component {
             textbook: '',
             price:'',
             imgURL: '',
-            userId: ''
+            authId: ''
         }
     }
 
@@ -42,15 +42,15 @@ class Post extends React.Component {
         if (this.state.courseCode.length < 3 || this.state.price.length < 1) {
             this.setState(setErrorMsg("Course and Price are both required!"));
         } else {
-            let id = getCurrentUid();
-            // this.setState({userId: id});
+            const id = getCurrentUid();
+            // this.setState({authId: id});
             this.props.mutate({
                 variables: {
                     courseCode: this.state.courseCode, 
                     textbook: this.state.textbook, 
                     price: this.state.price,
                     imgURL: this.state.imgURL, 
-                    userId: id
+                    authId: id
                 }
             }).then(id => {
                 this.clearForm();

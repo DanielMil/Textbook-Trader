@@ -13,7 +13,7 @@ let SchemasTemplates = {
         textbook: String,
         price: String,
         imgURL: String,
-        userId : String
+        authId : String
     }
 };
 module.exports = SchemasTemplates;
