@@ -66,7 +66,7 @@ class HomePage extends Component {
           </thead>
           <tbody>
 
-            {getTextbooks.map(textbook => (
+            {getTextbooks ?  getTextbooks.map(textbook => (
            
               <tr key={`${textbook.id}--course-code`}>
                 <td><CardImg top width="50%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" /></td>
@@ -75,7 +75,7 @@ class HomePage extends Component {
                 <td>{textbook.textbook}</td>
               </tr>
               
-            ))}
+            )): null}
           </tbody>
         </Table>
 

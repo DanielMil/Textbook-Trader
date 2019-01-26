@@ -52,14 +52,18 @@ const resolvers = {
       return true;
     },
     removeTextbook: async (_, { id } ) => {
-      let tb = await Textbook.findById(id);
-      let userID = tb.userId;
-      //remove texbookID from user array
-      await User.findByIdAndUpdate(userID, {$pull : {textbookIds: id}});
-      //delete textbook from DB
-      await Textbook.findByIdAndRemove(id); 
+      try {
+        let tb = await Textbook.findById(id);
+        let userID = tb.userId;
+        //remove texbookID from user array
+        await User.findByIdAndUpdate(userID, {$pull : {textbookIds: id}});
+        //delete textbook from DB
+        await Textbook.findByIdAndRemove(id);
+        return true; 
+      } catch (e) {
+        return false; 
+      }
       
-      return true;
     }
   }
 };
