@@ -13,7 +13,7 @@ const utilites = {
 
     formatTimeString: function() {
         let time = new Date(); 
-        let timeString = time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+        let timeString = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
         return timeString; 
     }
 };
