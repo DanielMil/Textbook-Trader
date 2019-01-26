@@ -1,4 +1,3 @@
-
 let SchemasTemplates = {
     userSchema : {
         fname :  String,
@@ -13,7 +12,8 @@ let SchemasTemplates = {
         textbook: String,
         price: String,
         imgURL: String,
-        authId : String
+        authId : String,
+        dateAndTime : String
     }
 };
 module.exports = SchemasTemplates;

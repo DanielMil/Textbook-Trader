@@ -21,7 +21,9 @@ const typeDefs = `
     price: String!
     imgURL: String
     authId: String!
+    dateAndTime: String!
   }
+  
   type Mutation {
     createUser(fname: String!, lname: String!, email: String!, authId: String!): User
     createTextbook(courseCode: String!, textbook: String!, price: String!, imgURL: String , authId: String!): Textbook

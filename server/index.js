@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const databaseSchematics = require('./dbSchemas.js');
 const typeDefs = require('./typedefs');
-
+const utilities = require('./utilities');
 
 const options = {
     port: 8000
@@ -40,15 +40,23 @@ const resolvers = {
         return newUser;
     },
     createTextbook: async (_, { courseCode, textbook, price, imgURL, authId } ) => {
-        let user = await User.findOne({authId: authId}); // Find user by firebase authID
-        let userId = user.id; //sets userID to mongo userID not firebaseID
-        const newTextbook =  new Textbook({courseCode, textbook, price, imgURL, authId});
-        await newTextbook.save();
-        await User.findByIdAndUpdate(userId, {$push : {textbookIds: newTextbook.id}});
-        return newTextbook;
+        try {
+          let user = await User.findOne({authId: authId}); // Find user by firebase authID
+          let userId = user.id; //sets userID to mongo userID not firebaseID
+          let dateAndTime = JSON.stringify(utilities.getPostingDateAndTimeInfo());
+          const newTextbook = new Textbook({courseCode, textbook, price, imgURL, authId, dateAndTime});
+          await newTextbook.save();
+          await User.findByIdAndUpdate(userId, {$push : {textbookIds: newTextbook.id}});
+          return newTextbook;
+        }
+        catch (e) {
+          console.log(e);
+          return null;
+        }
     },
     removeUser: async (_, { id } ) => {
       await User.findByIdAndRemove(id); 
+      //Need to remove all of the users' textbooks first.
       return true;
     },
     removeTextbook: async (_, { id } ) => {
