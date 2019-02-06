@@ -5,6 +5,7 @@ const typeDefs = `
     getTextbooks: [Textbook]!
     getUserTextbooks(authId: String!): [Textbook]
     getUser(id: String!): User
+    getTextbooksByCourseCode(courseCode: String!): [Textbook]
   }
   type User {
     id: ID!
