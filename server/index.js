@@ -4,7 +4,7 @@ const dotenv = require('dotenv').config();
 const databaseSchematics = require('./dbSchemas.js');
 const typeDefs = require('./typedefs');
 const utilities = require('./utilities');
-const errorMessages = require('./errormessages');
+const error = require('./error');
 
 const options = {
     port: 8000
@@ -36,14 +36,21 @@ const resolvers = {
     getTextbooksByCourseCode: async (_,{courseCode}) => {
       try {
         textbooks = await Textbook.find({courseCode: courseCode});
-
+        let dateAndTime = JSON.stringify(utilities.getPostingDateAndTimeInfo());
+        //If no search results are found for a course code, return a 404
         if (textbooks.length === 0 || textbooks === undefined) {
-          // textbooks.push(utilities.createError(`404`, `${errorMessages.ERROR_404}: No textbooks found with that course code.`)); 
+          let newTextbook = error.createErrorTextbook(dateAndTime);
+          newTextbook.error = error.createError(`404`, `${error.ERROR_404}: No textbooks found with that course code.`);
+          textbooks.push(newTextbook);  
+          return textbooks; 
         }
+        return utilities.getTextbooksSorted(textbooks);
       } catch(e) {
-        textbooks.push(utilities.createError(`500`, `${errorMessages.ERROR_500}: ${e.message}`));
+        let newTextbook = error.createErrorTextbook(dateAndTime);
+        newTextbook.error = error.createError(`500`, `${error.ERROR_500}: ${e.message}`);
+        textbooks.push(newTextbook);  
       } finally {
-        return textbooks; 
+          return textbooks; 
       }
     }
   },

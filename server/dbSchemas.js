@@ -4,7 +4,8 @@ let SchemasTemplates = {
         lname :  String,
         email : String,
         textbookIds : [String],
-        authId : String
+        authId : String,
+        error: String
     },
 
     textbookSchema : {
@@ -13,7 +14,8 @@ let SchemasTemplates = {
         price: String,
         imgURL: String,
         authId : String,
-        dateAndTime : String
+        dateAndTime : String,
+        error: String
     }
 };
 module.exports = SchemasTemplates;

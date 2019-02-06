@@ -18,25 +18,17 @@ const utilites = {
     },
 
     getTextbooksSorted: function(textBooks) {
-        // let arr = [];
-        // textBooks.forEach((textbook) => {
-        //     arr.push(textbook);
-        // });
-        // if (textBooks.length === 0 || textBooks === null) {
-        //     textBooks.push(this.createError('404', 'No textbooks found with that course code.'));
-        // }
-        console.log(textBooks); 
-        return textBooks; 
+        return textBooks.reverse(); 
     },
 
-    createError: function(errorCode, messsage) {
-        let errorObject = {
-            errorCode: errorCode,
-            messsage: messsage
-        }
-        return errorObject; 
-    }
+    // This needs to be called when textbooks are created 
+    validateCourseCode: function(courseCode) {
+        return /^[A-Za-z]{4}\d{4}$/.test(courseCode);
+    },
 
+    validatePrice: function(price) {
+        //TODO: Regex to check price
+    }
 };
 
 module.exports = utilites; 

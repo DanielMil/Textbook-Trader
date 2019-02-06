@@ -14,6 +14,7 @@ const typeDefs = `
     email: String!
     textbookIds: [String]
     authId: String!
+    error: String
   }
   type Textbook {
     id: ID!
@@ -23,6 +24,7 @@ const typeDefs = `
     imgURL: String
     authId: String!
     dateAndTime: String!
+    error: String
   }
   
   type Mutation {
