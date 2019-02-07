@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config();
 const databaseSchematics = require('./dbSchemas.js');
 const typeDefs = require('./typedefs');
 const utilities = require('./utilities');
+const error = require('./error');
 
 const options = {
     port: 8000
@@ -31,7 +32,27 @@ const resolvers = {
     getTextbooks: () => Textbook.find(),
     getUsers: () => User.find(),
     getUserTextbooks: (_,{authId}) => Textbook.find({authId: authId}),
-    getUser: (_,{id}) => User.findById(id)
+    getUser: (_,{id}) => User.findById(id),
+    getTextbooksByCourseCode: async (_,{courseCode}) => {
+      try {
+        textbooks = await Textbook.find({courseCode: courseCode});
+        let dateAndTime = JSON.stringify(utilities.getPostingDateAndTimeInfo());
+        //If no search results are found for a course code, return a 404
+        if (textbooks.length === 0 || textbooks === undefined) {
+          let newTextbook = error.createErrorTextbook(dateAndTime);
+          newTextbook.error = error.createError(`404`, `${error.ERROR_404}: No textbooks found with that course code.`);
+          textbooks.push(newTextbook);  
+          return textbooks; 
+        }
+        return utilities.getTextbooksSorted(textbooks);
+      } catch(e) {
+        let newTextbook = error.createErrorTextbook(dateAndTime);
+        newTextbook.error = error.createError(`500`, `${error.ERROR_500}: ${e.message}`);
+        textbooks.push(newTextbook);  
+      } finally {
+          return textbooks; 
+      }
+    }
   },
   Mutation: {
     createUser: async (_, { fname, lname, email, authId } ) => {
