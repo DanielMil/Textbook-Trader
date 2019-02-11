@@ -83,9 +83,10 @@ const resolvers = {
     removeTextbook: async (_, { id } ) => {
       try {
         let tb = await Textbook.findById(id);
-        let userID = tb.userId;
+        let user = await User.findOne({authId: tb.authId}); // Find user by firebase authID
+        let userId = user.id; //sets userID to mongo id not firebaseId
         //remove texbookID from user array
-        await User.findByIdAndUpdate(userID, {$pull : {textbookIds: id}});
+        await User.findByIdAndUpdate(userId, {$pull : {textbookIds: id}});
         //delete textbook from DB
         await Textbook.findByIdAndRemove(id);
         return true; 
